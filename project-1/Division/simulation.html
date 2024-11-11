@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vedic Division Methods</title>
+    <style>
+         body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e0f7fa; /* Light cyan background */
+            color: #333; /* Dark grey text */
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #00796b; /* Teal */
+            margin-bottom: 30px;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .input-section {
+            flex: 1 1 30%;
+            background-color: #ffffff; /* White background */
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .execution-result-section {
+            flex: 1 1 65%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .execution-steps, .result-section, .conditions-section {
+            background-color: #ffffff; /* White background */
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 15px;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+        button {
+            flex: 1 1 30%;
+            margin: 0 5px;
+            padding: 10px;
+            background-color: #0288d1; /* Light blue background */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0277bd; /* Darker blue */
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        .execution-steps h2, .result-section h2, .conditions-section h2 {
+            margin-bottom: 15px;
+            color: #00796b; /* Teal */
+            border-bottom: 2px solid #00796b; /* Teal border */
+            padding-bottom: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            text-align: left;
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+            font-size: 16px;
+        }
+        .result-display {
+            background-color: #4fc3f7; /* Light blue background */
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 5px solid #0288d1; /* Darker blue border */
+            font-size: 18px;
+            margin-top: 10px;
+        }
+        .error {
+            color: #e74c3c; /* Bright red color for errors */
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .conditions-section p {
+            margin: 0;
+            padding: 10px;
+            background-color: #b2ebf2; /* Light cyan background */
+            border-left: 5px solid #00796b; /* Teal border */
+            border-radius: 5px;
+            font-size: 14px; /* Smaller font size */
+            color: #000; /* Black color */
+        }
+        .conditions-section ul {
+            margin: 0;
+            padding-left: 20px;
+            font-size: 14px; /* Smaller font size */
+            color: #000; /* Black color */
+        }
+    </style>
+</head>
+<body>
+    <h1>Vedic Division Methods</h1>
+    <div class="container">
+        <!-- Input Section -->
+        <div class="input-section">
+            <label for="method">Choose Division Method:</label>
+            <select id="method" onchange="showConditions()">
+                <option value="default">--Select Option--</option>
+                <option value="nikhilam">Nikhilam Sutra</option>
+                <option value="paravartya">Paravartya Yojayet Sutra</option>
+                <option value="anurupyena">Anurupyena Method</option>
+            </select>
+
+            <div class="conditions-section" id="conditionsSection" style="display: none;">
+                <h2>Conditions:</h2>
+                <p id="conditionsDisplay"></p>
+            </div>
+
+            <label for="dividend" style="display: none;">Enter Dividend:</label>
+            <input type="number" id="dividend" required oninput="validateInputs()" style="display: none;">
+
+            <label for="divisor" style="display: none;">Enter Divisor:</label>
+            <input type="number" id="divisor" required oninput="validateInputs()" style="display: none;">
+
+            <div class="buttons">
+                <button id="startButton" onclick="startDivision()" disabled>Start</button>
+                <button id="nextButton" onclick="nextStep()" disabled>Next</button>
+                <button id="resetButton" onclick="resetCalculator()" disabled>Reset</button>
+            </div>
+        </div>
+
+        <!-- Execution Steps and Result Sections -->
+        <div class="execution-result-section">
+            <div class="execution-steps">
+                <h2>Steps:</h2>
+                <table id="stepsTable">
+                    <tbody>
+                        <!-- Steps will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="result-section">
+                <h2>Result:</h2>
+                <div id="resultDisplay" class="result-display">
+                    <!-- Result will be displayed here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="simu.js">
+    </script>
+</body>
+</html>

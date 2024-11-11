@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Experiment Hub</title>
+    <style>
+        /* Root theme colors */
+        :root {
+            --color-background: #121212;
+            --color-primary: #282a36;
+            --color-secondary: #44475a;
+            --color-accent: #bd93f9;
+            --color-highlight: #ff79c6;
+            --color-text: #f8f8f2;
+        }
+
+        /* Basic reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none; /* Hide default cursor */
+        }
+
+        /* Body Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, var(--color-background), var(--color-secondary));
+            color: var(--color-text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Custom Cursor Styling */
+        .custom-cursor {
+            position: fixed;
+            width: 15px;
+            height: 15px;
+            background-color: var(--color-highlight);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1000;
+            transition: transform 0.15s ease;
+            box-shadow: 0 0 10px var(--color-highlight);
+        }
+
+        .cursor-trail {
+            position: fixed;
+            width: 30px;
+            height: 30px;
+            background-color: var(--color-accent);
+            border-radius: 50%;
+            opacity: 0.2;
+            pointer-events: none;
+            z-index: 999;
+            transition: transform 0.1s ease, opacity 0.3s ease;
+        }
+
+        /* Background Floating Elements */
+        .floating-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .floating-element {
+            position: absolute;
+            border-radius: 50%;
+            background: var(--color-accent);
+            opacity: 0.05;
+            mix-blend-mode: overlay;
+            animation: float 10s ease-in-out infinite;
+        }
+
+        .floating-element:nth-child(1) { width: 250px; height: 250px; top: 20%; left: 10%; animation-delay: -2s; }
+        .floating-element:nth-child(2) { width: 180px; height: 180px; top: 75%; left: 30%; animation-delay: -3s; }
+        .floating-element:nth-child(3) { width: 300px; height: 300px; top: 30%; left: 70%; animation-delay: -1s; }
+        .floating-element:nth-child(4) { width: 200px; height: 200px; top: 85%; left: 85%; animation-delay: -4s; }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-30px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Main Content Container */
+        .container {
+            max-width: 600px;
+            padding: 50px;
+            background: var(--color-primary);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: var(--color-accent);
+            margin-bottom: 25px;
+            animation: slideIn 1.2s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Interactive Buttons */
+        .link {
+            display: inline-block;
+            font-size: 1.3rem;
+            color: var(--color-highlight);
+            text-decoration: none;
+            margin: 15px 0;
+            padding: 12px 25px;
+            border: 2px solid var(--color-highlight);
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .link:hover {
+            background-color: var(--color-highlight);
+            color: var(--color-primary);
+            transform: scale(1.1);
+            box-shadow: 0px 8px 20px rgba(255, 121, 198, 0.4);
+        }
+
+        .link i {
+            margin-left: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .link:hover i {
+            transform: translateX(5px);
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Floating background elements -->
+    <div class="floating-elements">
+        <div class="floating-element" data-speed="5"></div>
+        <div class="floating-element" data-speed="3"></div>
+        <div class="floating-element" data-speed="4"></div>
+        <div class="floating-element" data-speed="6"></div>
+    </div>
+
+    <!-- Custom Cursor Elements -->
+    <div class="custom-cursor"></div>
+    <div class="cursor-trail"></div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <h1>Explore Interactive Experiments</h1>
+        <a href="./project-1/Introduction.html" target="_blank" class="link hover-target">
+            Vedic Maths Experiment <i>→</i>
+        </a>
+        <a href="./project-2/Introduction.html" target="_blank" class="link hover-target">
+            JavaScript Experiment <i>→</i>
+        </a>
+    </div>
+
+    <script>
+        // Custom Cursor JavaScript
+        const cursor = document.querySelector('.custom-cursor');
+        const trail = document.querySelector('.cursor-trail');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.top = `${e.clientY}px`;
+            cursor.style.left = `${e.clientX}px`;
+            trail.style.top = `${e.clientY - 10}px`;
+            trail.style.left = `${e.clientX - 10}px`;
+        });
+
+        // Hover Effects for cursor trail
+        document.querySelectorAll('.link').forEach(link => {
+            link.addEventListener('mouseenter', () => {
+                trail.style.opacity = 0.5;
+            });
+            link.addEventListener('mouseleave', () => {
+                trail.style.opacity = 0.2;
+            });
+        });
+
+        // Interactive Floating Elements
+        document.addEventListener("mousemove", (e) => {
+            document.querySelectorAll(".floating-element").forEach((element) => {
+                const speed = element.getAttribute("data-speed");
+                const x = (window.innerWidth - e.pageX * speed) / 100;
+                const y = (window.innerHeight - e.pageY * speed) / 100;
+                element.style.transform = `translateX(${x}px) translateY(${y}px)`;
+            });
+        });
+    </script>
+</body>
+</html>

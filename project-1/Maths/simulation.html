@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS Math Functions</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Roboto:wght@300;400;500&family=Roboto+Mono&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css');
+
+:root {
+    --primary-color: #4682B4;
+    --secondary-color: #E6F2FF;
+    --text-color: #333;
+    --accent-color: #5F9EA0;
+}
+
+* {
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+body {
+    font-family: 'Roboto', Arial, sans-serif;
+    background: linear-gradient(135deg, #F0F8FF, #E6E6FA);
+    color: var(--text-color);
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 1.5s ease-in-out;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', sans-serif;
+}
+
+h1 {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 30px;
+    font-size: 3rem;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    animation: bounceInDown 1.5s, pulse 2s infinite alternate;
+    letter-spacing: -1px;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 30px;
+}
+
+.input-section, .execution-result-section {
+    background-color: var(--secondary-color);
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    animation: fadeInUp 1.5s;
+    transition: transform 0.3s ease;
+}
+
+.input-section:hover, .execution-result-section:hover {
+    transform: translateY(-5px);
+}
+
+.input-section {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+label {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    color: var(--primary-color);
+    font-size: 1.1rem;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 2px solid var(--primary-color);
+    font-size: 16px;
+    background-color: rgba(255, 255, 255, 0.8);
+    transition: all 0.3s ease;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 10px rgba(95, 158, 160, 0.5);
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+button {
+    flex: 1;
+    padding: 12px;
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    animation: fadeIn 1s;
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+button:hover {
+    background-color: #4F8A8B;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(79, 138, 139, 0.4);
+}
+
+button:active {
+    transform: translateY(1px);
+}
+
+button:disabled {
+    background-color: #B0C4DE;
+    cursor: not-allowed;
+    opacity: 0.7;
+    transform: none;
+    box-shadow: none;
+}
+
+button:disabled:hover {
+    background-color: #B0C4DE;
+    transform: none;
+    box-shadow: none;
+}
+
+.function-explanation, .execution-steps, .result-section {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.function-explanation h2, .execution-steps h2, .result-section h2 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+#functionExplanationDisplay, #steps {
+    font-family: 'Roboto Mono', 'Courier New', monospace;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    background-color: #f1f3f5;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #333;
+}
+
+#steps pre {
+    background-color: #dbdbdd;
+    border-radius: 4px;
+    padding: 10px;
+    overflow-x: auto;
+}
+
+#resultDisplay {
+    color: inherit; /* Change to inherit to use the parent's font color */
+    font-size: 18px;
+    background-color: #f1f3f5;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.error {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(1.05);
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        grid-template-columns: 1fr;
+    }
+}
+    </style>
+</head>
+<body>
+
+    <h1>JavaScript Math Functions</h1>
+
+    <div class="container">
+        <!-- Input Section -->
+        <div class="input-section">
+            <label for="mathFunction">Select a Math Function:</label>
+            <select id="mathFunction" onchange="toggleExtraInput()">
+                <option value="">--Select Function--</option>
+                <option value="abs">Math.abs (Number)</option>
+                <option value="ceil">Math.ceil (Number)</option>
+                <option value="floor">Math.floor (Number)</option>
+                <option value="round">Math.round (Number)</option>
+                <option value="pow">Math.pow (Base, Exponent)</option>
+                <option value="sqrt">Math.sqrt (Number)</option>
+                <option value="cbrt">Math.cbrt (Number)</option>
+                <option value="random">Math.random</option>
+                <option value="trunc">Math.trunc (Number)</option>
+                <option value="sin">Math.sin (Angle in radians)</option>
+                <option value="cos">Math.cos (Angle in radians)</option>
+                <option value="tan">Math.tan (Angle in radians)</option>
+                <option value="asin">Math.asin (Number)</option>
+                <option value="acos">Math.acos (Number)</option>
+                <option value="atan">Math.atan (Number)</option>
+                <option value="log">Math.log (Number)</option>
+                <option value="log10">Math.log10 (Number)</option>
+                <option value="exp">Math.exp (Number)</option>
+                <option value="min">Math.min (Number1, Number2)</option>
+                <option value="max">Math.max (Number1, Number2)</option>
+            </select>
+
+            <label for="userInput" style="display: none;">Enter a number:</label>
+            <input type="text" id="userInput" style="display: none;" placeholder="Enter a number" oninput="checkInputs()">
+            
+            <label for="extraInput" style="display: none;">Additional input:</label>
+            <input type="text" id="extraInput" style="display: none;" placeholder="Additional input" oninput="checkInputs()">
+            
+            <div class="buttons">
+                <button id="applyButton" disabled>Apply Function</button>
+                <button id="resetButton" disabled>Reset</button>
+            </div>
+        </div>
+
+        <!-- Result Section -->
+        <div class="execution-result-section">
+            <!-- Function Explanation Section -->
+            <div class="function-explanation">
+                <h2>Function Explanation</h2>
+                <div id="functionExplanationDisplay"></div>
+            </div>
+
+            <!-- Execution Steps Section -->
+            <div class="execution-steps">
+                <h2>Execution Steps</h2>
+                <div id="steps"></div>
+            </div>
+
+            <!-- Result Section -->
+            <div class="result-section">
+                <h2>Result</h2>
+                <div id="resultDisplay"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const explanations = {
+    abs: 'Math.abs() returns the absolute value of a number.',
+    ceil: 'Math.ceil() returns the smallest integer greater than or equal to a number.',
+    floor: 'Math.floor() returns the largest integer less than or equal to a number.',
+    round: 'Math.round() returns the value of a number rounded to the nearest integer.',
+    pow: 'Math.pow() returns the base raised to the exponent power.',
+    sqrt: 'Math.sqrt() returns the square root of a number.',
+    cbrt: 'Math.cbrt() returns the cube root of a number.',
+    random: 'Math.random() returns a pseudo-random number between 0 (inclusive) and 1 (exclusive).',
+    trunc: 'Math.trunc() returns the integer part of a number by removing any fractional digits.',
+    sin: 'Math.sin() returns the sine of a number (in radians).',
+    cos: 'Math.cos() returns the cosine of a number (in radians).',
+    tan: 'Math.tan() returns the tangent of a number (in radians).',
+    asin: 'Math.asin() returns the arcsine (inverse sine) of a number.',
+    acos: 'Math.acos() returns the arccosine (inverse cosine) of a number.',
+    atan: 'Math.atan() returns the arctangent (inverse tangent) of a number.',
+    log: 'Math.log() returns the natural logarithm (base e) of a number.',
+    log10: 'Math.log10() returns the base-10 logarithm of a number.',
+    exp: 'Math.exp() returns E raised to the power of a number.',
+    min: 'Math.min() returns the smallest of zero or more numbers.',
+    max: 'Math.max() returns the largest of zero or more numbers.'
+};
+
+const detailedExplanations = {
+    abs: 'Math.abs() - This method returns the absolute value of a number. The absolute value of a number is the number without its sign. For example, Math.abs(-5) returns 5.',
+    ceil: 'Math.ceil() - This method returns the smallest integer greater than or equal to a given number. For example, Math.ceil(4.2) returns 5.',
+    floor: 'Math.floor() - This method returns the largest integer less than or equal to a given number. For example, Math.floor(4.7) returns 4.',
+    round: 'Math.round() - This method returns the value of a number rounded to the nearest integer. For example, Math.round(4.5) returns 5.',
+    pow: 'Math.pow() - This method returns the base raised to the exponent power. For example, Math.pow(2, 3) returns 8.',
+    sqrt: 'Math.sqrt() - This method returns the square root of a number. For example, Math.sqrt(9) returns 3.',
+    cbrt: 'Math.cbrt() - This method returns the cube root of a number. For example, Math.cbrt(27) returns 3.',
+    random: 'Math.random() - This method returns a pseudo-random number between 0 (inclusive) and 1 (exclusive). For example, Math.random() might return 0.345.',
+    trunc: 'Math.trunc() - This method returns the integer part of a number by removing any fractional digits. For example, Math.trunc(4.9) returns 4.',
+    sin: 'Math.sin() - This method returns the sine of a number (in radians). For example, Math.sin(Math.PI / 2) returns 1.',
+    cos: 'Math.cos() - This method returns the cosine of a number (in radians). For example, Math.cos(0) returns 1.',
+    tan: 'Math.tan() - This method returns the tangent of a number (in radians). For example, Math.tan(Math.PI / 4) returns 1.',
+    asin: 'Math.asin() - This method returns the arcsine (inverse sine) of a number. For example, Math.asin(1) returns Math.PI / 2.',
+    acos: 'Math.acos() - This method returns the arccosine (inverse cosine) of a number. For example, Math.acos(1) returns 0.',
+    atan: 'Math.atan() - This method returns the arctangent (inverse tangent) of a number. For example, Math.atan(1) returns Math.PI / 4.',
+    log: 'Math.log() - This method returns the natural logarithm (base e) of a number. For example, Math.log(Math.E) returns 1.',
+    log10: 'Math.log10() - This method returns the base-10 logarithm of a number. For example, Math.log10(100) returns 2.',
+    exp: 'Math.exp() - This method returns E raised to the power of a number. For example, Math.exp(1) returns approximately 2.718.',
+    min: 'Math.min() - This method returns the smallest of zero or more numbers. For example, Math.min(1, 2, 3) returns 1.',
+    max: 'Math.max() - This method returns the largest of zero or more numbers. For example, Math.max(1, 2, 3) returns 3.'
+};
+
+function toggleExtraInput() {
+    const func = document.getElementById('mathFunction').value;
+    const extraInputLabel = document.querySelector('label[for="extraInput"]');
+    const extraInput = document.getElementById('extraInput');
+    const userInput = document.getElementById('userInput');
+    const userInputLabel = document.querySelector('label[for="userInput"]');
+    const functionExplanationDisplay = document.getElementById('functionExplanationDisplay');
+
+    // Hide all inputs by default
+    userInputLabel.style.display = 'none';
+    userInput.style.display = 'none';
+    extraInputLabel.style.display = 'none';
+    extraInput.style.display = 'none';
+
+    // Clear previous explanation
+    functionExplanationDisplay.textContent = '';
+
+    if (func) {
+        // Show user input when a function is selected
+        userInputLabel.style.display = 'block';
+        userInput.style.display = 'block';
+
+        // Set placeholder based on the selected function
+        switch(func) {
+            case 'abs':
+                userInput.placeholder = 'e.g., -5';
+                break;
+            case 'ceil':
+            case 'floor':
+            case 'round':
+            case 'trunc':
+                userInput.placeholder = 'e.g., 4.7';
+                break;
+            case 'pow':
+                userInput.placeholder = 'Base (e.g., 2)';
+                extraInputLabel.textContent = 'Exponent:';
+                extraInputLabel.style.display = 'block';
+                extraInput.style.display = 'block';
+                extraInput.placeholder = 'e.g., 3';
+                break;
+            case 'sqrt':
+            case 'cbrt':
+                userInput.placeholder = 'e.g., 9';
+                break;
+            case 'random':
+                userInput.placeholder = 'No input needed';
+                break;
+            case 'sin':
+            case 'cos':
+            case 'tan':
+                userInput.placeholder = 'Angle in radians (e.g., 1.57)';
+                break;
+            case 'asin':
+            case 'acos':
+            case 'atan':
+                userInput.placeholder = 'e.g., 0.5';
+                break;
+            case 'log':
+            case 'log10':
+            case 'exp':
+                userInput.placeholder = 'e.g., 10';
+                break;
+            case 'min':
+            case 'max':
+                userInput.placeholder = 'First number (e.g., 5)';
+                extraInputLabel.textContent = 'Second Number:';
+                extraInputLabel.style.display = 'block';
+                extraInput.style.display = 'block';
+                extraInput.placeholder = 'e.g., 10';
+                break;
+            default:
+                userInput.placeholder = 'Enter a number';
+        }
+
+        // Display the detailed explanation for the selected function
+        functionExplanationDisplay.textContent = detailedExplanations[func] || 'No detailed explanation available';
+    }
+
+    checkInputs();
+}
+
+function applyMathFunction() {
+    console.log("applyMathFunction called");
+    const func = document.getElementById('mathFunction').value;
+    const input = document.getElementById('userInput').value;
+    const resultDisplay = document.getElementById('resultDisplay');
+    const functionExplanationDisplay = document.getElementById('functionExplanationDisplay');
+    const stepsDisplay = document.getElementById('steps');
+    let result = '';
+    let code = '';
+
+    console.log("Function:", func);
+    console.log("Input:", input);
+
+    if (!isNaN(parseFloat(input))) {
+        try {
+            switch (func) {
+                case 'abs':
+                    result = Math.abs(parseFloat(input));
+                    code = `Math.abs(${input})`;
+                    break;
+                case 'ceil':
+                    result = Math.ceil(parseFloat(input));
+                    code = `Math.ceil(${input})`;
+                    break;
+                case 'floor':
+                    result = Math.floor(parseFloat(input));
+                    code = `Math.floor(${input})`;
+                    break;
+                case 'round':
+                    result = Math.round(parseFloat(input));
+                    code = `Math.round(${input})`;
+                    break;
+                case 'pow':
+                    const exponent = parseFloat(document.getElementById('extraInput').value);
+                    if (!isNaN(exponent)) {
+                        result = Math.pow(parseFloat(input), exponent);
+                        code = `Math.pow(${input}, ${exponent})`;
+                    } else {
+                        throw new Error('Invalid exponent input');
+                    }
+                    break;
+                case 'sqrt':
+                    result = Math.sqrt(parseFloat(input));
+                    code = `Math.sqrt(${input})`;
+                    break;
+                case 'cbrt':
+                    result = Math.cbrt(parseFloat(input));
+                    code = `Math.cbrt(${input})`;
+                    break;
+                case 'random':
+                    result = Math.random();
+                    code = `Math.random()`;
+                    break;
+                case 'trunc':
+                    result = Math.trunc(parseFloat(input));
+                    code = `Math.trunc(${input})`;
+                    break;
+                case 'sin':
+                    result = Math.sin(parseFloat(input));
+                    code = `Math.sin(${input})`;
+                    break;
+                case 'cos':
+                    result = Math.cos(parseFloat(input));
+                    code = `Math.cos(${input})`;
+                    break;
+                case 'tan':
+                    result = Math.tan(parseFloat(input));
+                    code = `Math.tan(${input})`;
+                    break;
+                case 'asin':
+                    result = Math.asin(parseFloat(input));
+                    code = `Math.asin(${input})`;
+                    break;
+                case 'acos':
+                    result = Math.acos(parseFloat(input));
+                    code = `Math.acos(${input})`;
+                    break;
+                case 'atan':
+                    result = Math.atan(parseFloat(input));
+                    code = `Math.atan(${input})`;
+                    break;
+                case 'log':
+                    result = Math.log(parseFloat(input));
+                    code = `Math.log(${input})`;
+                    break;
+                case 'log10':
+                    result = Math.log10(parseFloat(input));
+                    code = `Math.log10(${input})`;
+                    break;
+                case 'exp':
+                    result = Math.exp(parseFloat(input));
+                    code = `Math.exp(${input})`;
+                    break;
+                case 'min':
+                    const minSecondInput = parseFloat(document.getElementById('extraInput').value);
+                    if (!isNaN(minSecondInput)) {
+                        result = Math.min(parseFloat(input), minSecondInput);
+                        code = `Math.min(${input}, ${minSecondInput})`;
+                    } else {
+                        throw new Error('Invalid second input');
+                    }
+                    break;
+                case 'max':
+                    const maxSecondInput = parseFloat(document.getElementById('extraInput').value);
+                    if (!isNaN(maxSecondInput)) {
+                        result = Math.max(parseFloat(input), maxSecondInput);
+                        code = `Math.max(${input}, ${maxSecondInput})`;
+                    } else {
+                        throw new Error('Invalid second input');
+                    }
+                    break;
+                default:
+                    throw new Error('Invalid function');
+            }
+
+            // Display the detailed explanation
+            functionExplanationDisplay.textContent = detailedExplanations[func] || 'No detailed explanation available';
+            
+            stepsDisplay.innerHTML = `<pre>${code}</pre>`;
+            resultDisplay.textContent = `Input: ${input}\nResult: ${result}`;
+        } catch (error) {
+            resultDisplay.textContent = `Error: ${error.message}`;
+            stepsDisplay.textContent = 'Error: Invalid input';
+            functionExplanationDisplay.textContent = '';
+        }
+    } else {
+        resultDisplay.textContent = 'Error: Invalid input';
+        stepsDisplay.textContent = 'Error: Invalid input';
+        functionExplanationDisplay.textContent = '';
+    }
+
+    console.log("Result:", result);
+    console.log("Code:", code);
+
+    // Enable reset button after apply function is clicked
+    document.getElementById('resetButton').disabled = false;
+
+    // Disable the select option after applying the function
+    document.getElementById('mathFunction').disabled = true;
+}
+
+function checkInputs() {
+    const func = document.getElementById('mathFunction').value;
+    const userInput = document.getElementById('userInput').value.trim();
+    const extraInput = document.getElementById('extraInput').value.trim();
+
+    let isValid = func && userInput !== '';
+    if (func === 'pow' || func === 'min' || func === 'max') {
+        isValid = isValid && !isNaN(parseFloat(userInput)) && !isNaN(parseFloat(extraInput));
+    } else {
+        isValid = isValid && !isNaN(parseFloat(userInput));
+    }
+
+    document.getElementById('applyButton').disabled = !isValid;
+}
+
+function resetForm() {
+    document.getElementById('mathFunction').value = '';
+    document.getElementById('userInput').value = '';
+    document.getElementById('extraInput').value = '';
+    document.getElementById('functionExplanationDisplay').textContent = '';
+    document.getElementById('steps').textContent = '';
+    document.getElementById('resultDisplay').textContent = '';
+    document.getElementById('applyButton').disabled = true;
+    document.getElementById('resetButton').disabled = true;
+    
+    // Hide input boxes
+    document.getElementById('userInput').style.display = 'none';
+    document.getElementById('extraInput').style.display = 'none';
+    document.querySelector('label[for="userInput"]').style.display = 'none';
+    document.querySelector('label[for="extraInput"]').style.display = 'none';
+
+    // Enable the select option when resetting the form
+    document.getElementById('mathFunction').disabled = false;
+}
+
+// Make sure this event listener is properly set up
+document.addEventListener('DOMContentLoaded', function() {
+    console.log("DOM fully loaded");
+    document.getElementById('applyButton').addEventListener('click', function() {
+        console.log("Apply button clicked");
+        applyMathFunction();
+    });
+    document.getElementById('mathFunction').addEventListener('change', toggleExtraInput);
+    document.getElementById('userInput').addEventListener('input', checkInputs);
+    document.getElementById('extraInput').addEventListener('input', checkInputs);
+    document.getElementById('resetButton').addEventListener('click', resetForm);
+});
+
+    </script>
+    
+
+</body>
+</html>

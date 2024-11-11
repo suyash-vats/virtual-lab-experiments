@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vedic Maths Multiplication Methods</title>
+    <style>
+        /* styles.css */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #e0f7fa; /* Light cyan background */
+    color: #333; /* Dark grey text */
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+h1 {
+    text-align: center;
+    color: #00796b; /* Teal */
+    margin-bottom: 30px;
+}
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+.input-section {
+    flex: 1 1 30%;
+    background-color: #ffffff; /* White background */
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.execution-result-section {
+    flex: 1 1 65%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.execution-steps, .result-section {
+    background-color: #ffffff; /* White background */
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.conditions {
+    background-color: #b2ebf2; /* Light cyan background */
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    border-left: 5px solid #00796b; /* Teal border */
+    display: none; /* Initially hidden */
+}
+.conditions ul {
+    margin: 0;
+    padding-left: 20px;
+}
+label {
+    font-weight: bold;
+    display: block;
+    margin-top: 15px;
+}
+input, select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+.buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+button {
+    flex: 1 1 30%;
+    margin: 0 5px;
+    padding: 10px;
+    background-color: #0288d1; /* Light blue background */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+button:hover {
+    background-color: #0277bd; /* Darker blue */
+}
+button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+.execution-steps h2, .result-section h2 {
+    margin-bottom: 15px;
+    color: #00796b; /* Teal */
+    border-bottom: 2px solid #00796b; /* Teal border */
+    padding-bottom: 5px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+th, td {
+    text-align: left;
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+    font-size: 16px;
+}
+.result-display {
+    background-color: #4fc3f7; /* Light blue background */
+    padding: 15px;
+    border-radius: 5px;
+    border-left: 5px solid #0288d1; /* Darker blue border */
+    font-size: 18px;
+    margin-top: 10px;
+}
+.error {
+    color: #e74c3c; /* Bright red color for errors */
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+
+    </style>
+</head>
+<body>
+    <h1>Vedic Maths Multiplication Methods</h1>
+    <div class="container">
+        <!-- Input Section -->
+        <div class="input-section">
+            <label for="operation">Select Operation:</label>
+            <select id="operation" onchange="toggleSections()">
+                <option value="">--Select Operation--</option>
+                <option value="ekadhikena">Ekadhikena Purvena</option>
+                <option value="nikhilam">Nikhilam Sutra</option>
+                <option value="anurupena">Anurupena Method</option>
+                <option value="ekanyunena">Ekanyunena Method</option>
+                <option value="urdhva">Urdhva Tiryagbhyam</option>
+            </select>
+
+            <div id="conditions-ekadhikena" class="conditions">
+                <strong>Conditions:</strong>
+                <ul>
+                    <li>The first digits of both numbers must be the same.</li>
+                    <li>The addition of last digit of both numbers should be equal to 10</li>
+                    <li>Enter a  integer value only</li>
+                </ul>
+            </div>
+
+            <div id="conditions-nikhilam" class="conditions">
+                <strong>Conditions:</strong>
+                <ul>
+                    <li>Both numbers should be close to a power of like(10,100,1000, etc.)</li>
+                    <li>Enter a  integer value only</li>
+                </ul>
+            </div>
+
+            <div id="conditions-anurupena" class="conditions">
+                <strong>Conditions:</strong>
+                <ul>
+                    <li>Both numbers should be close to a working base.</li>
+                    <li>Enter a  integer value only</li>
+                </ul>
+            </div>
+
+            <div id="conditions-ekanyunena" class="conditions">
+                <strong>Conditions:</strong>
+                <ul>
+                    <li>First numbers should be close to a base (like 10, 100, 1000, etc.)</li>
+                    <li>Second number should be contain only 9's (like 9,99,999, etc.)</li>
+                    <li>Enter a  integer value only</li>
+                </ul>
+            </div>
+
+            <div id="conditions-urdhva" class="conditions">
+                <strong>Conditions:</strong>
+                <ul>
+                    <li>Any two numbers can be multiplied using this method.</li>
+                    <li>Enter a  integer value only</li>
+                </ul>
+            </div>
+
+            <label for="num1" id="num1Label" style="display: none;">Enter Number 1:</label>
+            <input type="number" id="num1" placeholder="" style="display: none;">
+
+            <label for="num2" id="num2Label" style="display: none;">Enter Number 2:</label>
+            <input type="number" id="num2" placeholder="" style="display: none;">
+
+            <div id="anurupenaInputs" style="display: none;">
+                <label for="workingBase">Enter the working base:</label>
+                <input type="number" id="workingBase" required>
+                <label for="constantBase">Enter the constant base:</label>
+                <input type="number" id="constantBase" required>
+            </div>
+
+            <div class="buttons">
+                <button id="startButton" onclick="startCalculation()">Start</button>
+                <button id="nextButton" onclick="nextStep()">Next</button>
+                <button id="resetButton" onclick="resetCalculator()">Reset</button>
+            </div>
+        </div>
+
+        <!-- Execution Steps and Result Sections -->
+        <div class="execution-result-section">
+            <div class="execution-steps">
+                <h2>Execution Steps:</h2>
+                <table id="stepsTable">
+                    <tbody>
+                        <!-- Steps will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="result-section">
+                <h2>Result:</h2>
+                <div id="resultDisplay" class="result-display">
+                    <!-- Result will be displayed here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="simu.js">
+    </script>
+</body>
+</html>

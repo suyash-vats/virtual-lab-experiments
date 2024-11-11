@@ -1,0 +1,670 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>JavaScript Operator Functions</title>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Roboto:wght@300;400;500&family=Roboto+Mono&display=swap');
+            @import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css');
+
+            :root {
+                --primary-color: #4682B4;
+                --secondary-color: #E6F2FF;
+                --text-color: #333;
+                --accent-color: #5F9EA0;
+            }
+
+            * {
+                box-sizing: border-box;
+                transition: all 0.3s ease;
+            }
+
+            body {
+                font-family: 'Roboto', Arial, sans-serif;
+                background: linear-gradient(135deg, #F0F8FF, #E6E6FA);
+                color: var(--text-color);
+                max-width: 1200px;
+                margin: 40px auto;
+                padding: 20px;
+                border-radius: 12px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+                animation: fadeIn 1.5s ease-in-out;
+            }
+
+            h1, h2, h3, h4, h5, h6 {
+                font-family: 'Montserrat', sans-serif;
+            }
+
+            h1 {
+                text-align: center;
+                color: var(--primary-color);
+                margin-bottom: 30px;
+                font-size: 3rem;
+                font-weight: 700;
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+                animation: bounceInDown 1.5s, pulse 2s infinite alternate;
+                letter-spacing: -1px;
+            }
+
+            .container {
+                display: grid;
+                grid-template-columns: 1fr 2fr;
+                gap: 30px;
+            }
+
+            .input-section, .execution-result-section {
+                background-color: var(--secondary-color);
+                border-radius: 12px;
+                padding: 25px;
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+                animation: fadeInUp 1.5s;
+                transition: transform 0.3s ease;
+            }
+
+            .input-section:hover, .execution-result-section:hover {
+                transform: translateY(-5px);
+            }
+
+            .input-section {
+                display: flex;
+                flex-direction: column;
+                gap: 25px;
+            }
+
+            label {
+                font-family: 'Montserrat', sans-serif;
+                font-weight: 600;
+                color: var(--primary-color);
+                font-size: 1.1rem;
+            }
+
+            input, select {
+                width: 100%;
+                padding: 12px 15px;
+                border-radius: 8px;
+                border: 2px solid var(--primary-color);
+                font-size: 16px;
+                background-color: rgba(255, 255, 255, 0.8);
+                transition: all 0.3s ease;
+            }
+
+            input:focus, select:focus {
+                outline: none;
+                border-color: var(--accent-color);
+                box-shadow: 0 0 10px rgba(95, 158, 160, 0.5);
+            }
+
+            .buttons {
+                display: flex;
+                justify-content: space-between;
+                gap: 15px;
+            }
+
+            button {
+                flex: 1;
+                padding: 12px;
+                background-color: var(--accent-color);
+                color: white;
+                border: none;
+                border-radius: 8px;
+                font-size: 14px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                animation: fadeIn 1s;
+                font-family: 'Montserrat', sans-serif;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+            }
+
+            button:hover {
+                background-color: #4F8A8B;
+                transform: translateY(-3px);
+                box-shadow: 0 5px 15px rgba(79, 138, 139, 0.4);
+            }
+
+            button:active {
+                transform: translateY(1px);
+            }
+
+            button:disabled {
+                background-color: #B0C4DE;
+                cursor: not-allowed;
+                opacity: 0.7;
+                transform: none;
+                box-shadow: none;
+            }
+
+            button:disabled:hover {
+                background-color: #B0C4DE;
+                transform: none;
+                box-shadow: none;
+            }
+
+            .function-explanation, .execution-steps, .result-section {
+                background-color: #f8f9fa;
+                border-radius: 8px;
+                padding: 15px;
+                margin-bottom: 20px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+
+            .function-explanation h2, .execution-steps h2, .result-section h2 {
+                color: var(--primary-color);
+                margin-bottom: 10px;
+            }
+
+            #functionExplanationDisplay, #steps {
+                font-family: 'Roboto Mono', 'Courier New', monospace;
+                white-space: pre-wrap;
+                word-wrap: break-word;
+                background-color: #f1f3f5;
+                border-radius: 5px;
+                padding: 10px;
+                font-size: 14px;
+                line-height: 1.5;
+                color: #333;
+            }
+
+            #steps pre {
+                background-color: #dbdbdd;
+                border-radius: 4px;
+                padding: 10px;
+                overflow-x: auto;
+            }
+
+            #resultDisplay {
+                color: inherit;
+                font-size: 18px;
+                background-color: #f1f3f5;
+                border-radius: 5px;
+                padding: 10px;
+            }
+
+            .error {
+                color: #dc3545;
+                font-weight: bold;
+            }
+
+            @keyframes pulse {
+                0% {
+                    transform: scale(1);
+                }
+                100% {
+                    transform: scale(1.05);
+                }
+            }
+
+            @media (max-width: 768px) {
+                .container {
+                    grid-template-columns: 1fr;
+                }
+            }
+
+            #inputContainer {
+                display: none;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>JavaScript Operator Functions</h1>
+
+        <div class="container">
+            <!-- Input Section -->
+            <div class="input-section">
+                <label for="operatorType">Select Operator Type:</label>
+                <select id="operatorType" onchange="toggleInputs()">
+                    <option value="">--Select Operator Type--</option>
+                    <option value="arithmetic">Arithmetic</option>
+                    <option value="unary">Unary</option>
+                    <option value="comparison">Comparison</option>
+                    <option value="logical">Logical</option>
+                    <option value="assignment">Assignment</option>
+                </select>
+
+                <div id="inputFields"></div>
+
+                <div class="buttons">
+                    <button id="applyButton" onclick="applyOperator()" disabled>
+                        Apply Operator
+                    </button>
+                    <button id="resetButton" onclick="resetForm()" disabled>
+                        Reset
+                    </button>
+                </div>
+            </div>
+
+            <!-- Execution Result Section -->
+            <div class="execution-result-section">
+                <!-- Function Explanation Section -->
+                <div class="function-explanation">
+                    <h2>Function Explanation</h2>
+                    <div id="functionExplanation"></div>
+                </div>
+
+                <!-- Execution Steps Section -->
+                <div class="execution-steps">
+                    <h2>Execution Steps</h2>
+                    <pre id="executionSteps"></pre>
+                </div>
+
+                <!-- Result Section -->
+                <div class="result-section">
+                    <h2>Execution Result</h2>
+                    <div class="result-display" id="resultDisplay"></div>
+                    <div class="error" id="errorDisplay"></div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            let currentStep = 0;
+            let results = [];
+            const steps = {
+                arithmetic: [
+                    {
+                        subtype: "addition",
+                        description: "Perform addition of two numbers.",
+                        action: (a, b) => a + b,
+                        explanation: "The <code>+</code> operator performs addition.",
+                    },
+                    {
+                        subtype: "subtraction",
+                        description: "Perform subtraction of two numbers.",
+                        action: (a, b) => a - b,
+                        explanation: "The <code>-</code> operator performs subtraction.",
+                    },
+                    {
+                        subtype: "multiplication",
+                        description: "Perform multiplication of two numbers.",
+                        action: (a, b) => a * b,
+                        explanation: "The <code>*</code> operator performs multiplication.",
+                    },
+                    {
+                        subtype: "division",
+                        description: "Perform division of two numbers.",
+                        action: (a, b) => a / b,
+                        explanation: "The <code>/</code> operator performs division.",
+                    },
+                    {
+                        subtype: "modulus",
+                        description: "Find the remainder of the division of two numbers.",
+                        action: (a, b) => a % b,
+                        explanation: "The <code>%</code> operator returns the remainder of division.",
+                    },
+                ],
+                unary: [
+                    {
+                        subtype: "negation",
+                        description: "Negate the value.",
+                        action: (a) => -a,
+                        explanation: "The <code>-</code> operator negates the value.",
+                    },
+                    {
+                        subtype: "increment",
+                        description: "Increment the value by 1.",
+                        action: (a) => ++a,
+                        explanation: "The <code>++</code> operator increments the value by 1.",
+                    },
+                    {
+                        subtype: "decrement",
+                        description: "Decrement the value by 1.",
+                        action: (a) => --a,
+                        explanation: "The <code>--</code> operator decrements the value by 1.",
+                    },
+                ],
+                comparison: [
+                    {
+                        subtype: "greater_than",
+                        description: "Check if the first value is greater than the second value.",
+                        action: (a, b) => a > b,
+                        explanation: "The <code>></code> operator checks if the first value is greater than the second value.",
+                    },
+                    {
+                        subtype: "less_than",
+                        description: "Check if the first value is less than the second value.",
+                        action: (a, b) => a < b,
+                        explanation: "The <code><</code> operator checks if the first value is less than the second value.",
+                    },
+                    {
+                        subtype: "equal_to",
+                        description: "Check if two values are equal.",
+                        action: (a, b) => a === b,
+                        explanation: "The <code>===</code> operator checks if two values are equal.",
+                    },
+                ],
+                logical: [
+                    {
+                        subtype: "and",
+                        description: "Perform logical AND operation.",
+                        action: (a, b) => a && b,
+                        explanation: "The <code>&&</code> operator performs a logical AND operation.",
+                    },
+                    {
+                        subtype: "or",
+                        description: "Perform logical OR operation.",
+                        action: (a, b) => a || b,
+                        explanation: "The <code>||</code> operator performs a logical OR operation.",
+                    },
+                    {
+                        subtype: "not",
+                        description: "Perform logical NOT operation.",
+                        action: (a) => !a,
+                        explanation: "The <code>!</code> operator performs a logical NOT operation.",
+                    },
+                ],
+                assignment: [
+                    {
+                        subtype: "assignment",
+                        description: "Assign a value to a variable.",
+                        action: (a, b) => b,
+                        explanation: "The <code>=</code> operator assigns a value to a variable.",
+                    },
+                    {
+                        subtype: "addition_assignment",
+                        description: "Add a value to the variable and assign the result.",
+                        action: (a, b) => a + b,
+                        explanation: "The <code>+=</code> operator adds a value to the variable and assigns the result.",
+                    },
+                    {
+                        subtype: "subtraction_assignment",
+                        description: "Subtract a value from the variable and assign the result.",
+                        action: (a, b) => a - b,
+                        explanation: "The <code>-=</code> operator subtracts a value from the variable and assigns the result.",
+                    },
+                    {
+                        subtype: "multiplication_assignment",
+                        description: "Multiply the variable by a value and assign the result.",
+                        action: (a, b) => a * b,
+                        explanation: "The <code>*=</code> operator multiplies the variable by a value and assigns the result.",
+                    },
+                    {
+                        subtype: "division_assignment",
+                        description: "Divide the variable by a value and assign the result.",
+                        action: (a, b) => a / b,
+                        explanation: "The <code>/=</code> operator divides the variable by a value and assigns the result.",
+                    },
+                ],
+            };
+
+            function toggleInputs() {
+                const operatorType = document.getElementById("operatorType").value;
+                const inputFields = document.getElementById("inputFields");
+                const applyButton = document.getElementById("applyButton");
+
+                inputFields.innerHTML = ""; // Clear previous inputs
+                applyButton.disabled = true;
+
+                if (operatorType) {
+                    const subtypes = steps[operatorType];
+                    inputFields.innerHTML = `
+                    <label for="subtype">Select Subtype:</label>
+                    <select id="subtype" onchange="renderInputs('${operatorType}')">
+                        <option value="">--Select Subtype--</option>
+                        ${subtypes.map((subtype) => `<option value="${subtype.subtype}">${subtype.subtype.charAt(0).toUpperCase() + subtype.subtype.slice(1)}</option>`).join("")}
+                    </select>
+                `;
+
+                    inputFields.innerHTML += `<div id="dynamicFields"></div>`;
+                }
+            }
+
+            function renderInputs(operatorType) {
+                const subtype = document.getElementById("subtype").value;
+                const dynamicFields = document.getElementById("dynamicFields");
+                const subtypes = steps[operatorType];
+                const selectedSubtype = subtypes.find((s) => s.subtype === subtype);
+
+                if (selectedSubtype) {
+                    if (operatorType === "arithmetic" || operatorType === "comparison") {
+                        dynamicFields.innerHTML = `
+                        <label for="firstValue">Enter First Value:</label>
+                        <input type="number" id="firstValue" placeholder="First value" oninput="checkInputs()">
+                        <label for="secondValue">Enter Second Value:</label>
+                        <input type="number" id="secondValue" placeholder="Second value" oninput="checkInputs()">
+                    `;
+                    } else if (operatorType === "unary") {
+                        dynamicFields.innerHTML = `
+                        <label for="unaryValue">Enter Value:</label>
+                        <input type="number" id="unaryValue" placeholder="Value" oninput="checkInputs()">
+                    `;
+                    } else if (operatorType === "logical") {
+                        if (subtype === "not") {
+                            dynamicFields.innerHTML = `
+                            <label for="logicalValue">Enter Boolean Value:</label>
+                            <select id="logicalValue" onchange="checkInputs()">
+                                <option value="">--Select--</option>
+                                <option value="true">True</option>
+                                <option value="false">False</option>
+                            </select>
+                        `;
+                        } else {
+                            dynamicFields.innerHTML = `
+                            <label for="logicalFirstValue">Enter First Boolean Value:</label>
+                            <select id="logicalFirstValue" onchange="checkInputs()">
+                                <option value="">--Select--</option>
+                                <option value="true">True</option>
+                                <option value="false">False</option>
+                            </select>
+                            <label for="logicalSecondValue">Enter Second Boolean Value:</label>
+                            <select id="logicalSecondValue" onchange="checkInputs()">
+                                <option value="">--Select--</option>
+                                <option value="true">True</option>
+                                <option value="false">False</option>
+                            </select>
+                        `;
+                        }
+                    } else if (operatorType === "assignment") {
+                        dynamicFields.innerHTML = `
+                        <label for="initialValue">Enter Initial Value:</label>
+                        <input type="number" id="initialValue" placeholder="Initial value" oninput="checkInputs()">
+                        <label for="assignmentValue">Enter Value to Assign:</label>
+                        <input type="number" id="assignmentValue" placeholder="Value to assign" oninput="checkInputs()">
+                    `;
+                    }
+                }
+            }
+
+            function checkInputs() {
+                const operatorType = document.getElementById("operatorType").value;
+                const subtype = document.getElementById("subtype").value;
+                const applyButton = document.getElementById("applyButton");
+
+                let allInputsFilled = false;
+
+                if (operatorType && subtype) {
+                    if (operatorType === "arithmetic" || operatorType === "comparison") {
+                        const firstValue = document.getElementById("firstValue").value;
+                        const secondValue = document.getElementById("secondValue").value;
+                        allInputsFilled = firstValue !== "" && secondValue !== "";
+                    } else if (operatorType === "unary") {
+                        const unaryValue = document.getElementById("unaryValue").value;
+                        allInputsFilled = unaryValue !== "";
+                    } else if (operatorType === "logical") {
+                        if (subtype === "not") {
+                            const logicalValue = document.getElementById("logicalValue").value;
+                            allInputsFilled = logicalValue !== "";
+                        } else {
+                            const logicalFirstValue = document.getElementById("logicalFirstValue").value;
+                            const logicalSecondValue = document.getElementById("logicalSecondValue").value;
+                            allInputsFilled = logicalFirstValue !== "" && logicalSecondValue !== "";
+                        }
+                    } else if (operatorType === "assignment") {
+                        const initialValue = document.getElementById("initialValue").value;
+                        const assignmentValue = document.getElementById("assignmentValue").value;
+                        allInputsFilled = initialValue !== "" && assignmentValue !== "";
+                    }
+                }
+
+                applyButton.disabled = !allInputsFilled;
+            }
+
+            function applyOperator() {
+                const operatorType = document.getElementById("operatorType").value;
+                const subtype = document.getElementById("subtype").value;
+                const functionExplanationElem = document.getElementById("functionExplanation");
+                const executionStepsElem = document.getElementById("executionSteps");
+                const errorElem = document.getElementById("errorDisplay");
+                const resetButton = document.getElementById("resetButton");
+
+                executionStepsElem.textContent = "";
+                functionExplanationElem.innerHTML = "";
+                errorElem.textContent = "";
+                results = []; // Clear previous results
+
+                try {
+                    const subtypes = steps[operatorType];
+                    const selectedSubtype = subtypes.find((s) => s.subtype === subtype);
+
+                    if (selectedSubtype) {
+                        if (operatorType === "arithmetic" || operatorType === "comparison") {
+                            const firstValue = parseFloat(document.getElementById("firstValue").value);
+                            const secondValue = parseFloat(document.getElementById("secondValue").value);
+                            if (isNaN(firstValue) || isNaN(secondValue)) throw new Error("Invalid input values.");
+                            const result = selectedSubtype.action(firstValue, secondValue);
+                            executionStepsElem.textContent = `
+// ${selectedSubtype.description}
+const firstValue = ${firstValue};
+const secondValue = ${secondValue};
+let result;
+
+// Perform the operation
+result = firstValue ${getOperatorSymbol(operatorType, subtype)} secondValue;
+
+console.log(result); // Output: ${result}
+                            `;
+                            functionExplanationElem.innerHTML = selectedSubtype.explanation;
+                            results.push(result);
+                        } else if (operatorType === "unary") {
+                            const unaryValue = parseFloat(document.getElementById("unaryValue").value);
+                            if (isNaN(unaryValue)) throw new Error("Invalid input value.");
+                            const result = selectedSubtype.action(unaryValue);
+                            executionStepsElem.textContent = `
+// ${selectedSubtype.description}
+let value = ${unaryValue};
+let result;
+
+// Perform the unary operation
+${subtype === "increment" || subtype === "decrement" ? `result = ${getOperatorSymbol(operatorType, subtype)}value;` : `result = ${getOperatorSymbol(operatorType, subtype)}value;`}
+
+console.log(result); // Output: ${result}
+                            `;
+                            functionExplanationElem.innerHTML = selectedSubtype.explanation;
+                            results.push(result);
+                        } else if (operatorType === "logical") {
+                            if (subtype === "not") {
+                                const logicalValue = document.getElementById("logicalValue").value === "true";
+                                const result = selectedSubtype.action(logicalValue);
+                                executionStepsElem.textContent = `
+// ${selectedSubtype.description}
+const value = ${logicalValue};
+let result;
+
+// Perform the logical operation
+result = ${getOperatorSymbol(operatorType, subtype)}value;
+
+console.log(result); // Output: ${result}
+                                `;
+                                functionExplanationElem.innerHTML = selectedSubtype.explanation;
+                                results.push(result);
+                            } else {
+                                const logicalFirstValue = document.getElementById("logicalFirstValue").value === "true";
+                                const logicalSecondValue = document.getElementById("logicalSecondValue").value === "true";
+                                const result = selectedSubtype.action(logicalFirstValue, logicalSecondValue);
+                                executionStepsElem.textContent = `
+// ${selectedSubtype.description}
+const firstValue = ${logicalFirstValue};
+const secondValue = ${logicalSecondValue};
+let result;
+
+// Perform the logical operation
+result = firstValue ${getOperatorSymbol(operatorType, subtype)} secondValue;
+
+console.log(result); // Output: ${result}
+                                `;
+                                functionExplanationElem.innerHTML = selectedSubtype.explanation;
+                                results.push(result);
+                            }
+                        } else if (operatorType === "assignment") {
+                            const initialValue = parseFloat(document.getElementById("initialValue").value);
+                            const assignmentValue = parseFloat(document.getElementById("assignmentValue").value);
+                            if (isNaN(initialValue) || isNaN(assignmentValue)) throw new Error("Invalid input values.");
+                            const result = selectedSubtype.action(initialValue, assignmentValue);
+                            executionStepsElem.textContent = `
+// ${selectedSubtype.description}
+let variable = ${initialValue}; // Initial value
+const value = ${assignmentValue};
+
+// Perform the assignment operation
+variable ${getOperatorSymbol(operatorType, subtype)} value;
+
+console.log(variable); // Output: ${result}
+                            `;
+                            functionExplanationElem.innerHTML = selectedSubtype.explanation;
+                            results.push(result);
+                        }
+                    }
+
+                    document.getElementById("resultDisplay").textContent = results.join("\n");
+                    resetButton.disabled = false;
+                } catch (error) {
+                    errorElem.textContent = error.message;
+                    document.getElementById("resultDisplay").textContent = "";
+                }
+
+                document.getElementById("operatorType").disabled = true;
+                document.getElementById("subtype").disabled = true;
+                document.getElementById("applyButton").disabled = true;
+                document.getElementById("resetButton").disabled = false;
+            }
+
+            function getOperatorSymbol(operatorType, subtype) {
+                const symbolMap = {
+                    arithmetic: {
+                        addition: "+",
+                        subtraction: "-",
+                        multiplication: "*",
+                        division: "/",
+                        modulus: "%",
+                    },
+                    unary: {
+                        negation: "-",
+                        increment: "++",
+                        decrement: "--",
+                    },
+                    comparison: {
+                        greater_than: ">",
+                        less_than: "<",
+                        equal_to: "===",
+                    },
+                    logical: {
+                        and: "&&",
+                        or: "||",
+                        not: "!",
+                    },
+                    assignment: {
+                        assignment: "=",
+                        addition_assignment: "+=",
+                        subtraction_assignment: "-=",
+                        multiplication_assignment: "*=",
+                        division_assignment: "/=",
+                    },
+                };
+                return symbolMap[operatorType][subtype];
+            }
+
+            function resetForm() {
+                document.getElementById("operatorType").value = "";
+                document.getElementById("operatorType").disabled = false;
+                document.getElementById("inputFields").innerHTML = "";
+                document.getElementById("functionExplanation").innerHTML = "";
+                document.getElementById("executionSteps").textContent = "";
+                document.getElementById("resultDisplay").textContent = "";
+                document.getElementById("errorDisplay").textContent = "";
+                document.getElementById("applyButton").disabled = true;
+                document.getElementById("resetButton").disabled = true;
+            }
+        </script>
+    </body>
+</html>

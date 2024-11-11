@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Array Methods</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Roboto:wght@300;400;500&family=Roboto+Mono&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css');
+
+        :root {
+            --primary-color: #4682B4;
+            --secondary-color: #E6F2FF;
+            --text-color: #333;
+            --accent-color: #5F9EA0;
+        }
+
+        * {
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background: linear-gradient(135deg, #F0F8FF, #E6E6FA);
+            color: var(--text-color);
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Montserrat', sans-serif;
+            color:var(--primary-color);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            font-size: 3rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            animation: bounceInDown 1.5s, pulse 2s infinite alternate;
+            letter-spacing: -1px;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+        }
+
+        .input-section, .execution-result-section {
+            background-color: var(--secondary-color);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            animation: fadeInUp 1.5s;
+            transition: transform 0.3s ease;
+        }
+
+        .input-section:hover, .execution-result-section:hover {
+            transform: translateY(-5px);
+        }
+
+        .input-section {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        label {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 2px solid var(--primary-color);
+            font-size: 16px;
+            background-color: rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 10px rgba(95, 158, 160, 0.5);
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: fadeIn 1s;
+            font-family: 'Montserrat', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        button:hover {
+            background-color: #4F8A8B;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(79, 138, 139, 0.4);
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        button:disabled {
+            background-color: #B0C4DE;
+            cursor: not-allowed;
+            opacity: 0.7;
+            transform: none;
+            box-shadow: none;
+        }
+
+        button:disabled:hover {
+            background-color: #B0C4DE;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .function-explanation, .execution-steps, .result-section {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .function-explanation h2, .execution-steps h2, .result-section h2 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        #functionExplanationDisplay, #steps, #resultDisplay {
+            font-family: 'Roboto Mono', 'Courier New', monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            background-color: #f1f3f5;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #333;
+        }
+
+        #steps pre, #resultDisplay pre {
+            background-color: #dbdbdd;
+            border-radius: 4px;
+            padding: 10px;
+            overflow-x: auto;
+        }
+
+        .error {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            100% {
+                transform: scale(1.05);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>JavaScript Array Methods Demonstrator</h1>
+    <div class="container">
+        <div class="input-section">
+            <label for="arrayMethod">Select Array Method:</label>
+            <select id="arrayMethod" onchange="toggleExtraInput()">
+                <option value="">--Select Method--</option>
+                <option value="push">push</option>
+                <option value="pop">pop</option>
+                <option value="shift">shift</option>
+                <option value="unshift">unshift</option>
+                <option value="splice">splice</option>
+                <option value="slice">slice</option>
+                <option value="concat">concat</option>
+                <option value="join">join</option>
+                <option value="sort">sort</option>
+                <option value="reverse">reverse</option>
+                <option value="map">map</option>
+                <option value="filter">filter</option>
+                <option value="reduce">reduce</option>
+                <option value="find">find</option>
+                <option value="includes">includes</option>
+                <option value="indexOf">indexOf</option>
+            </select>
+            <label for="arrayInput">Enter array values (comma-separated):</label>
+            <input type="text" id="arrayInput" placeholder="1, 2, 3, 4" oninput="checkInputs()" style="display: none;">
+
+            <div id="userInputSection" style="display: none;">
+                <label for="userInput">Enter Value:</label>
+                <input type="text" id="userInput" oninput="checkInputs()">
+            </div>
+
+            <div id="extraInputSection" style="display: none;">
+                <label for="extraInput">Enter Extra Value:</label>
+                <input type="text" id="extraInput" oninput="checkInputs()">
+            </div>
+
+            <div class="buttons">
+                <button id="applyButton" disabled>Apply Method</button>
+                <button id="resetButton" disabled>Reset</button>
+            </div>
+        </div>
+
+        <div class="execution-result-section">
+            <div class="function-explanation">
+                <h2>Function Explanation</h2>
+                <pre id="functionExplanationDisplay"></pre>
+            </div>
+            <div class="execution-steps">
+                <h2>Execution Code</h2>
+                <pre id="steps"></pre>
+            </div>
+            <div class="result-section">
+                <h2>Result</h2>
+                <pre id="resultDisplay"></pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const arrayMethods = {
+            push: { explanation: 'Adds one or more elements to the end of an array and returns the new length of the array.' },
+            pop: { explanation: 'Removes the last element from an array and returns that element.' },
+            shift: { explanation: 'Removes the first element from an array and returns that element.' },
+            unshift: { explanation: 'Adds one or more elements to the beginning of an array and returns the new length of the array.' },
+            splice: { explanation: 'Changes the contents of an array by removing or replacing existing elements and/or adding new elements in place.' },
+            slice: { explanation: 'Returns a shallow copy of a portion of an array into a new array object selected from start to end (end not included) where start and end represent the index of items in that array.' },
+            concat: { explanation: 'Merges two or more arrays into a single array.' },
+            join: { explanation: 'Joins all elements of an array into a string.' },
+            sort: { explanation: 'Sorts the elements of an array in place and returns the sorted array.' },
+            reverse: { explanation: 'Reverses the elements of an array in place and returns the array.' },
+            map: { explanation: 'Creates a new array populated with the results of calling a provided function on every element in the calling array.' },
+            filter: { explanation: 'Creates a new array with all elements that pass the test implemented by the provided function.' },
+            reduce: { explanation: 'Executes a reducer function (that you provide) on each element of the array, resulting in a single output value.' },
+            find: { explanation: 'Returns the first element in the array that satisfies the provided testing function.' },
+            includes: { explanation: 'Determines whether an array includes a certain value among its entries, returning true or false as appropriate.' },
+            indexOf: { explanation: 'Returns the first index at which a given element can be found in the array, or -1 if it is not present.' }
+        };
+
+        function toggleExtraInput() {
+            const method = document.getElementById('arrayMethod').value;
+            const userInputSection = document.getElementById('userInputSection');
+            const extraInputSection = document.getElementById('extraInputSection');
+            const arrayInputSection = document.getElementById('arrayInput');
+            const applyButton = document.getElementById('applyButton');
+            const userInput = document.getElementById('userInput');
+            const extraInput = document.getElementById('extraInput');
+
+            // Hide all input sections by default
+            userInputSection.style.display = 'none';
+            extraInputSection.style.display = 'none';
+            arrayInputSection.style.display = 'none';
+
+            if (method) {
+                // Show array input when a method is selected
+                arrayInputSection.style.display = 'block';
+
+                // Show relevant input sections based on the selected method
+                if (['push', 'unshift', 'splice', 'concat'].includes(method)) {
+                    extraInputSection.style.display = 'block';
+                    if (method === 'splice') {
+                        userInputSection.style.display = 'block';
+                        userInput.placeholder = 'e.g., 1, 2';
+                        extraInput.placeholder = 'e.g., 10, 11';
+                    } else if (method === 'concat') {
+                        extraInput.placeholder = 'e.g., 5, 6, 7';
+                    } else {
+                        extraInput.placeholder = 'e.g., 5';
+                    }
+                } else if (['map', 'filter', 'reduce', 'find', 'includes', 'indexOf', 'join', 'slice'].includes(method)) {
+                    userInputSection.style.display = 'block';
+                    userInput.placeholder = method === 'map' ? 'e.g., x => x * 2' :
+                                            method === 'filter' ? 'e.g., x => x > 2' :
+                                            method === 'reduce' ? 'e.g., (acc, curr) => acc + curr' :
+                                            method === 'find' ? 'e.g., x => x > 3' :
+                                            method === 'includes' || method === 'indexOf' ? 'e.g., 3' :
+                                            method === 'join' ? 'e.g., -' :
+                                            'e.g., 1, 3';
+                }
+
+                // Update function explanation
+                document.getElementById('functionExplanationDisplay').innerText = arrayMethods[method]?.explanation || 'No explanation available.';
+            } else {
+                // Clear function explanation if no method is selected
+                document.getElementById('functionExplanationDisplay').innerText = '';
+            }
+
+            // Call checkInputs at the end to update button state
+            checkInputs();
+        }
+
+        function checkInputs() {
+            const method = document.getElementById('arrayMethod').value;
+            const arrayInput = document.getElementById('arrayInput');
+            const userInput = document.getElementById('userInput');
+            const extraInput = document.getElementById('extraInput');
+            const applyButton = document.getElementById('applyButton');
+
+            let isValid = method !== '' && arrayInput.value.trim() !== '';
+
+            if (userInput.parentElement.style.display !== 'none') {
+                isValid = isValid && userInput.value.trim() !== '';
+            }
+
+            if (extraInput.parentElement.style.display !== 'none') {
+                isValid = isValid && extraInput.value.trim() !== '';
+            }
+
+            applyButton.disabled = !isValid;
+            document.getElementById('resetButton').disabled = true;
+        }
+
+        // Add event listeners
+        document.getElementById('arrayMethod').addEventListener('change', toggleExtraInput);
+        document.getElementById('arrayInput').addEventListener('input', checkInputs);
+        document.getElementById('userInput').addEventListener('input', checkInputs);
+        document.getElementById('extraInput').addEventListener('input', checkInputs);
+
+        document.getElementById('applyButton').addEventListener('click', () => {
+            const arrayInput = document.getElementById('arrayInput').value;
+            const method = document.getElementById('arrayMethod').value;
+            const userInput = document.getElementById('userInput').value;
+            const extraInput = document.getElementById('extraInput').value;
+            let result;
+            let error = null;
+            let arr;
+            let executionCode = '';
+
+            try {
+                arr = arrayInput.split(',').map(item => {
+                    const trimmed = item.trim();
+                    if (isNaN(trimmed)) {
+                        throw new Error('Array input must contain only numbers');
+                    }
+                    return parseFloat(trimmed);
+                });
+
+                executionCode = `const arr = [${arr}];\n`;
+
+                switch (method) {
+                    case 'push':
+                    case 'unshift':
+                        if (isNaN(extraInput.trim())) {
+                            throw new Error('Input must be a number');
+                        }
+                        const value = parseFloat(extraInput.trim());
+                        executionCode += `arr.${method}(${value});\n`;
+                        if (method === 'push') {
+                            arr.push(value);
+                        } else {
+                            arr.unshift(value);
+                        }
+                        result = `${method.charAt(0).toUpperCase() + method.slice(1)} result: [${arr}]`;
+                        break;
+                    case 'pop':
+                    case 'shift':
+                        if (arr.length === 0) {
+                            throw new Error('Cannot perform operation on an empty array');
+                        }
+                        const removed = method === 'pop' ? arr.pop() : arr.shift();
+                        executionCode += `const removed = arr.${method}();\n`;
+                        result = `${method.charAt(0).toUpperCase() + method.slice(1)} result: ${removed}\nNew array: [${arr}]`;
+                        break;
+                    case 'splice':
+                        const [start, deleteCount] = userInput.split(',').map(item => {
+                            const trimmed = item.trim();
+                            if (isNaN(trimmed)) {
+                                throw new Error('Start and delete count must be numbers');
+                            }
+                            return parseInt(trimmed);
+                        });
+                        const items = extraInput.split(',').map(item => {
+                            const trimmed = item.trim();
+                            if (isNaN(trimmed)) {
+                                throw new Error('Items to insert must be numbers');
+                            }
+                            return parseFloat(trimmed);
+                        });
+                        executionCode += `arr.splice(${start}, ${deleteCount}, ${items.join(', ')});\n`;
+                        arr.splice(start, deleteCount, ...items);
+                        result = `Splice result: [${arr}]`;
+                        break;
+                    case 'slice':
+                        const [begin, end] = userInput.split(',').map(item => {
+                            const trimmed = item.trim();
+                            if (isNaN(trimmed)) {
+                                throw new Error('Begin and end indices must be numbers');
+                            }
+                            return parseInt(trimmed);
+                        });
+                        executionCode += `const sliced = arr.slice(${begin}, ${end});\n`;
+                        result = `Slice result: [${arr.slice(begin, end)}]`;
+                        break;
+                    case 'concat':
+                        const additionalArr = extraInput.split(',').map(item => {
+                            const trimmed = item.trim();
+                            if (isNaN(trimmed)) {
+                                throw new Error('Additional array must contain only numbers');
+                            }
+                            return parseFloat(trimmed);
+                        });
+                        executionCode += `const concatenated = arr.concat([${additionalArr}]);\n`;
+                        result = `Concat result: [${arr.concat(additionalArr)}]`;
+                        break;
+                    case 'join':
+                        executionCode += `const joined = arr.join('${userInput}');\n`;
+                        result = `Join result: ${arr.join(userInput)}`;
+                        break;
+                    case 'sort':
+                        executionCode += `arr.sort((a, b) => a - b);\n`;
+                        result = `Sort result: [${arr.sort((a, b) => a - b)}]`;
+                        break;
+                    case 'reverse':
+                        executionCode += `arr.reverse();\n`;
+                        result = `Reverse result: [${arr.reverse()}]`;
+                        break;
+                    case 'map':
+                    case 'filter':
+                    case 'reduce':
+                    case 'find':
+                        let func;
+                        try {
+                            func = eval(`(${userInput})`);
+                        } catch (e) {
+                            throw new Error('Invalid function syntax');
+                        }
+                        if (typeof func !== 'function') {
+                            throw new Error('Input must be a valid function');
+                        }
+                        if (method === 'map') {
+                            executionCode += `const mapped = arr.map(${userInput});\n`;
+                            result = `Map result: [${arr.map(func)}]`;
+                        } else if (method === 'filter') {
+                            executionCode += `const filtered = arr.filter(${userInput});\n`;
+                            result = `Filter result: [${arr.filter(func)}]`;
+                        } else if (method === 'reduce') {
+                            executionCode += `const reduced = arr.reduce(${userInput}, 0);\n`;
+                            result = `Reduce result: ${arr.reduce(func, 0)}`;
+                        } else {
+                            executionCode += `const found = arr.find(${userInput});\n`;
+                            result = `Find result: ${arr.find(func)}`;
+                        }
+                        break;
+                    case 'includes':
+                    case 'indexOf':
+                        if (isNaN(userInput.trim())) {
+                            throw new Error('Input must be a number');
+                        }
+                        const searchValue = parseFloat(userInput.trim());
+                        executionCode += `const ${method}Result = arr.${method}(${searchValue});\n`;
+                        result = method === 'includes' ?
+                            `Includes result: ${arr.includes(searchValue)}` :
+                            `IndexOf result: ${arr.indexOf(searchValue)}`;
+                        break;
+                    default:
+                        throw new Error('Please select a valid array method.');
+                }
+
+                executionCode += `console.log(arr); // [${arr}]`;
+            } catch (e) {
+                error = e.message;
+            }
+
+            // Update result display
+            if (error) {
+                document.getElementById('resultDisplay').innerHTML = `<span class="error">Error: ${error}</span>`;
+            } else {
+                document.getElementById('resultDisplay').innerText = result;
+            }
+
+            // Update execution code display
+            document.getElementById('steps').innerText = executionCode;
+
+            // Enable reset button after apply method is clicked
+            document.getElementById('resetButton').disabled = false;
+        });
+
+        document.getElementById('resetButton').addEventListener('click', () => {
+            document.getElementById('arrayMethod').value = '';
+            document.getElementById('arrayInput').value = '';
+            document.getElementById('userInput').value = '';
+            document.getElementById('extraInput').value = '';
+
+            document.getElementById('userInputSection').style.display = 'none';
+            document.getElementById('extraInputSection').style.display = 'none';
+            document.getElementById('arrayInput').style.display = 'none';
+
+            document.getElementById('functionExplanationDisplay').innerText = '';
+            document.getElementById('steps').innerText = '';
+            document.getElementById('resultDisplay').innerText = '';
+
+            document.getElementById('applyButton').disabled = true;
+            document.getElementById('resetButton').disabled = true;
+
+            // Call toggleExtraInput to reset the UI state
+            toggleExtraInput();
+        });
+
+        // Initial UI setup
+        toggleExtraInput();
+    </script>
+</body>
+</html>

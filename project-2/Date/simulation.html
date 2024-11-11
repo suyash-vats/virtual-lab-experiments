@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS Date Functions</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Roboto:wght@300;400;500&family=Roboto+Mono&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css');
+
+:root {
+    --primary-color: #4682B4;
+    --secondary-color: #E6F2FF;
+    --text-color: #333;
+    --accent-color: #5F9EA0;
+}
+
+* {
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+body {
+    font-family: 'Roboto', Arial, sans-serif;
+    background: linear-gradient(135deg, #F0F8FF, #E6E6FA);
+    color: var(--text-color);
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 1.5s ease-in-out;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', sans-serif;
+}
+
+h1 {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 30px;
+    font-size: 3rem;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    animation: bounceInDown 1.5s, pulse 2s infinite alternate;
+    letter-spacing: -1px;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 30px;
+}
+
+.input-section, .execution-result-section {
+    background-color: var(--secondary-color);
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    animation: fadeInUp 1.5s;
+    transition: transform 0.3s ease;
+}
+
+.input-section:hover, .execution-result-section:hover {
+    transform: translateY(-5px);
+}
+
+.input-section {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+label {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    color: var(--primary-color);
+    font-size: 1.1rem;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 2px solid var(--primary-color);
+    font-size: 16px;
+    background-color: rgba(255, 255, 255, 0.8);
+    transition: all 0.3s ease;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 10px rgba(95, 158, 160, 0.5);
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+button {
+    flex: 1;
+    padding: 12px;
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    animation: fadeIn 1s;
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+button:hover {
+    background-color: #4F8A8B;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(79, 138, 139, 0.4);
+}
+
+button:active {
+    transform: translateY(1px);
+}
+
+button:disabled {
+    background-color: #B0C4DE;
+    cursor: not-allowed;
+    opacity: 0.7;
+    transform: none;
+    box-shadow: none;
+}
+
+button:disabled:hover {
+    background-color: #B0C4DE;
+    transform: none;
+    box-shadow: none;
+}
+
+.function-explanation, .execution-steps, .result-section {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.function-explanation h2, .execution-steps h2, .result-section h2 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+#functionExplanationDisplay, #steps {
+    font-family: 'Roboto Mono', 'Courier New', monospace;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    background-color: #f1f3f5;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #333;
+}
+
+#steps pre {
+    background-color: #dbdbdd;
+    border-radius: 4px;
+    padding: 10px;
+    overflow-x: auto;
+}
+
+#resultDisplay {
+    color: inherit; /* Change to inherit to use the parent's font color */
+    font-size: 18px;
+    background-color: #f1f3f5;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.error {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(1.05);
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        grid-template-columns: 1fr;
+    }
+}
+    </style>
+</head>
+<body>
+
+    <h1>JavaScript Date Functions</h1>
+
+    <div class="container">
+        <!-- Input Section -->
+        <div class="input-section">
+            <label for="dateFunction">Select a Date Function:</label>
+            <select id="dateFunction" onchange="toggleExtraInput()">
+                <option value="">--Select Function--</option>
+                <option value="getDate">Date.getDate()</option>
+                <option value="getDay">Date.getDay()</option>
+                <option value="getFullYear">Date.getFullYear()</option>
+                <option value="getMonth">Date.getMonth()</option>
+                <option value="getHours">Date.getHours()</option>
+                <option value="getMinutes">Date.getMinutes()</option>
+                <option value="getSeconds">Date.getSeconds()</option>
+                <option value="getMilliseconds">Date.getMilliseconds()</option>
+                <option value="toISOString">Date.toISOString()</option>
+                <option value="toLocaleDateString">Date.toLocaleDateString()</option>
+                <option value="toLocaleTimeString">Date.toLocaleTimeString()</option>
+                <option value="toLocaleString">Date.toLocaleString()</option>
+                <option value="now">Date.now()</option>
+            </select>
+
+            <div id="inputContainer" style="display: none;">
+                <label for="userInput">Enter a date (YYYY-MM-DD):</label>
+                <input type="text" id="userInput" placeholder="Enter a date (YYYY-MM-DD)" oninput="checkInputs()">
+            </div>
+            
+            <div class="buttons">
+                <button id="applyButton" disabled>Apply Function</button>
+                <button id="resetButton" disabled>Reset</button>
+            </div>
+        </div>
+
+        <!-- Result Section -->
+        <div class="execution-result-section">
+            <!-- Function Explanation Section -->
+            <div class="function-explanation">
+                <h2>Function Explanation</h2>
+                <div id="functionExplanationDisplay"></div>
+            </div>
+
+            <!-- Execution Steps Section -->
+            <div class="execution-steps">
+                <h2>Execution Steps</h2>
+                <div id="steps"></div>
+            </div>
+
+            <!-- Result Section -->
+            <div class="result-section">
+                <h2>Result</h2>
+                <div id="resultDisplay"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const explanations = {
+            getDate: 'Date.getDate() returns the day of the month (1-31) for a specified date.',
+            getDay: 'Date.getDay() returns the day of the week (0-6) for a specified date.',
+            getFullYear: 'Date.getFullYear() returns the year of a specified date as a four-digit number.',
+            getMonth: 'Date.getMonth() returns the month (0-11) for a specified date.',
+            getHours: 'Date.getHours() returns the hour (0-23) for a specified date.',
+            getMinutes: 'Date.getMinutes() returns the minutes (0-59) for a specified date.',
+            getSeconds: 'Date.getSeconds() returns the seconds (0-59) for a specified date.',
+            getMilliseconds: 'Date.getMilliseconds() returns the milliseconds (0-999) for a specified date.',
+            toISOString: 'Date.toISOString() returns the date as a string in ISO 8601 format.',
+            toLocaleDateString: 'Date.toLocaleDateString() returns the date as a string, using locale conventions.',
+            toLocaleTimeString: 'Date.toLocaleTimeString() returns the time as a string, using locale conventions.',
+            toLocaleString: 'Date.toLocaleString() returns the date and time as a string, using locale conventions.',
+            now: 'Date.now() returns the number of milliseconds elapsed since January 1, 1970 00:00:00 UTC.'
+        };
+
+        function toggleExtraInput() {
+            const functionName = document.getElementById('dateFunction').value;
+            const inputContainer = document.getElementById('inputContainer');
+            const userInput = document.getElementById('userInput');
+            const functionExplanationDisplay = document.getElementById('functionExplanationDisplay');
+            
+            if (['toISOString', 'toLocaleDateString', 'toLocaleTimeString', 'toLocaleString', 'now'].includes(functionName) || !functionName) {
+                inputContainer.style.display = 'none';
+                userInput.disabled = true;
+            } else {
+                inputContainer.style.display = 'block';
+                userInput.disabled = false;
+            }
+
+            // Show function explanation
+            functionExplanationDisplay.innerHTML = explanations[functionName] || 'Select a function to see its explanation.';
+
+            checkInputs();
+        }
+
+        function checkInputs() {
+            const functionName = document.getElementById('dateFunction').value;
+            const userInput = document.getElementById('userInput').value;
+            const applyButton = document.getElementById('applyButton');
+            
+            const noInputNeeded = ['toISOString', 'toLocaleDateString', 'toLocaleTimeString', 'toLocaleString', 'now'].includes(functionName);
+            applyButton.disabled = !functionName || (!noInputNeeded && !isValidDateInput(userInput));
+        }
+
+        function isValidDateInput(input) {
+            if (!input) return false;
+            const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+            if (!datePattern.test(input)) return false;
+            const date = new Date(input);
+            return !isNaN(date.getTime());
+        }
+
+        function applyDateFunction() {
+            const functionName = document.getElementById('dateFunction').value;
+            const inputValue = document.getElementById('userInput').value;
+            const functionExplanation = document.getElementById('functionExplanationDisplay');
+            const executionSteps = document.getElementById('steps');
+            const resultDisplay = document.getElementById('resultDisplay');
+
+            if (!functionName) {
+                resultDisplay.innerHTML = '<span class="error">Please select a function.</span>';
+                return;
+            }
+
+            let date;
+            if (!['toISOString', 'toLocaleDateString', 'toLocaleTimeString', 'toLocaleString', 'now'].includes(functionName)) {
+                if (!inputValue) {
+                    resultDisplay.innerHTML = '<span class="error">Please enter a date.</span>';
+                    return;
+                }
+                if (!isValidDateInput(inputValue)) {
+                    resultDisplay.innerHTML = '<span class="error">Invalid date. Please use YYYY-MM-DD format and ensure it\'s a valid date.</span>';
+                    return;
+                }
+                date = new Date(inputValue);
+            } else {
+                date = new Date();
+            }
+
+            functionExplanation.innerHTML = explanations[functionName] || 'No explanation available.';
+
+            let executionCode = '';
+            let result;
+
+            if (functionName === 'now') {
+                executionCode = 'const result = Date.now();';
+                result = Date.now();
+            } else {
+                executionCode = `const date = new Date("${date.toISOString()}");\nconst result = date.${functionName}();`;
+                result = date[functionName]();
+            }
+
+            executionSteps.innerHTML = `<pre><code>${executionCode}</code></pre>`;
+
+            resultDisplay.innerHTML = result !== undefined ? result : '<span class="error">An error occurred.</span>';
+            
+            document.getElementById('resetButton').disabled = false;
+            document.getElementById('dateFunction').disabled = true;
+        }
+
+        function resetFields() {
+            document.getElementById('dateFunction').value = '';
+            document.getElementById('dateFunction').disabled = false;
+            document.getElementById('userInput').value = '';
+            document.getElementById('inputContainer').style.display = 'none';
+            document.getElementById('functionExplanationDisplay').innerHTML = '';
+            document.getElementById('steps').innerHTML = '';
+            document.getElementById('resultDisplay').innerHTML = '';
+            document.getElementById('applyButton').disabled = true;
+            document.getElementById('resetButton').disabled = true;
+            toggleExtraInput();
+        }
+
+        document.getElementById('resetButton').disabled = true;
+
+        document.getElementById('applyButton').addEventListener('click', applyDateFunction);
+        document.getElementById('resetButton').addEventListener('click', resetFields);
+
+        // Call toggleExtraInput on page load
+        document.addEventListener('DOMContentLoaded', toggleExtraInput);
+    </script>
+
+</body>
+</html>

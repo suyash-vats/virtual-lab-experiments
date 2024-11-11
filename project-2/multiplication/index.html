@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiplication Table Generator</title>
+    <style>
+                      
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Roboto:wght@300;400;500&family=Roboto+Mono&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css');
+
+:root {
+    --primary-color: #4682B4;
+    --secondary-color: #E6F2FF;
+    --text-color: #333;
+    --accent-color: #5F9EA0;
+}
+
+* {
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+body {
+    font-family: 'Roboto', Arial, sans-serif;
+    background: linear-gradient(135deg, #F0F8FF, #E6E6FA);
+    color: var(--text-color);
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 1.5s ease-in-out;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', sans-serif;
+}
+
+h1 {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 30px;
+    font-size: 3rem;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    animation: bounceInDown 1.5s, pulse 2s infinite alternate;
+    letter-spacing: -1px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.input-section, .execution-result-section {
+    background-color: var(--secondary-color);
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    animation: fadeInUp 1.5s;
+    transition: transform 0.3s ease;
+    width: 100%;
+}
+
+.input-section:hover, .execution-result-section:hover {
+    transform: translateY(-5px);
+}
+
+.input-section {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+label {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    color: var(--primary-color);
+    font-size: 1.1rem;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 2px solid var(--primary-color);
+    font-size: 16px;
+    background-color: rgba(255, 255, 255, 0.8);
+    transition: all 0.3s ease;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 10px rgba(95, 158, 160, 0.5);
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+#generateButton, #resetButton {
+    padding: 12px 20px;
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    animation: fadeIn 1s;
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    flex: 1;
+    width: 50%; /* Set both buttons to 50% width */
+    max-width: 200px; /* Limit maximum width */
+    min-width: 120px; /* Ensure minimum width */
+}
+
+#generateButton:hover, #resetButton:hover {
+    background-color: #4F8A8B;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(79, 138, 139, 0.4);
+}
+
+#generateButton:active, #resetButton:active {
+    transform: translateY(1px);
+}
+
+#generateButton:disabled, #resetButton:disabled {
+    background-color: #B0C4DE;
+    cursor: not-allowed;
+    opacity: 0.7;
+    transform: none;
+    box-shadow: none;
+}
+
+.function-explanation, .execution-steps, .result-section, .code-section {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.function-explanation h2, .execution-steps h2, .result-section h2, .code-section h2 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.code-section pre {
+    margin: 0;
+    padding: 0;
+}
+
+#functionExplanationDisplay, #steps, #jsCode {
+    font-family: 'Roboto Mono', 'Courier New', monospace;
+    white-space: pre;
+    background-color: #f1f3f5;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #333;
+    overflow-x: auto;
+}
+
+#steps pre {
+    background-color: #dbdbdd;
+    border-radius: 4px;
+    padding: 10px;
+    overflow-x: auto;
+}
+
+#resultDisplay {
+    color: inherit; /* Change to inherit to use the parent's font color */
+    font-size: 18px;
+    background-color: #f1f3f5;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.error {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(1.05);
+    }
+}
+
+@media (min-width: 768px) {
+    .container {
+        flex-direction: row;
+    }
+
+    .input-section {
+        width: 30%;
+    }
+
+    .execution-result-section {
+        width: 70%;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    .input-section, .execution-result-section {
+        padding: 15px;
+    }
+
+    input, select, button {
+        font-size: 14px;
+    }
+
+    #generateButton, #resetButton {
+        padding: 10px 15px;
+    }
+}
+
+.result-section {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+th, td {
+    border: 1px solid var(--primary-color);
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+@media (max-width: 600px) {
+    table {
+        font-size: 12px;
+    }
+
+    th, td {
+        padding: 4px;
+    }
+}
+
+@media (max-width: 400px) {
+    table {
+        font-size: 10px;
+    }
+
+    th, td {
+        padding: 2px;
+    }
+}
+
+.highlight {
+    background-color: yellow;
+    font-weight: bold;
+}
+
+#nextButton {
+    padding: 12px;
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    animation: fadeIn 1s;
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    width: calc(50% - 7.5px);
+}
+
+#nextButton:hover {
+    background-color: #4F8A8B;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(79, 138, 139, 0.4);
+}
+
+#nextButton:active {
+    transform: translateY(1px);
+}
+
+#nextButton:disabled {
+    background-color: #B0C4DE;
+    cursor: not-allowed;
+    opacity: 0.7;
+    transform: none;
+    box-shadow: none;
+}
+
+#nextButton:disabled:hover {
+    background-color: #B0C4DE;
+    transform: none;
+    box-shadow: none;
+}
+
+#jsCode {
+    white-space: pre;
+    font-family: monospace;
+    background-color: #f5f5f5;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+    
+    </style>
+</head>
+<body>
+    <h1>Multiplication Table Generator</h1>
+
+    <div class="container">
+        <!-- Input Section -->
+        <div class="input-section">
+            <label for="maxNumber">Enter a number:</label>
+            <input type="number" id="maxNumber" placeholder="Enter any positive number" min="1" oninput="checkInput()">
+            
+            <div class="buttons">
+                <button id="generateButton" onclick="generateTable()" disabled>Generate Table</button>
+                <button id="resetButton" onclick="resetForm()" disabled>Reset</button>
+            </div>
+        </div>
+
+        <!-- Result Section -->
+        <div class="execution-result-section">
+            <div class="function-explanation">
+                <h2>Multiplication Table Explanation</h2>
+                <div id="tableExplanation"></div>
+            </div>
+            <div class="code-section">
+                <h2>JavaScript Code</h2>
+                <pre id="jsCode"></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Multiplication Table Section -->
+    <div class="result-section">
+        <h2>Multiplication Table</h2>
+        <div id="tableDisplay"></div>
+    </div>
+
+    <script>
+        let maxNumber;
+
+        function checkInput() {
+            const numberInput = document.getElementById("maxNumber").value;
+            const generateButton = document.getElementById("generateButton");
+            generateButton.disabled = !(numberInput && numberInput >= 1);
+        }
+
+        function generateTable() {
+            maxNumber = parseInt(document.getElementById("maxNumber").value);
+            const tableDisplay = document.getElementById("tableDisplay");
+
+            if (isNaN(maxNumber) || maxNumber < 1 ||maxNumber>=10000) {
+                tableDisplay.innerHTML = "<p class='error'>Please enter a valid number.</p>";
+            return;
+            }
+           
+
+            updateTableDisplay();
+            document.getElementById("maxNumber").disabled = true;
+            document.getElementById("generateButton").disabled = true;
+            document.getElementById("resetButton").disabled = false;
+
+            displayCode();
+        }
+
+        function updateTableDisplay() {
+            const tableDisplay = document.getElementById("tableDisplay");
+            let tableHTML = "<table><tr><th>×</th>";
+            for (let j = 1; j <= 10; j++) {
+                tableHTML += `<th>${j}</th>`;
+            }
+            tableHTML += "</tr>";
+
+            for (let i = 1; i <= maxNumber; i++) {
+                tableHTML += `<tr><th>${i}</th>`;
+                for (let j = 1; j <= 10; j++) {
+                    tableHTML += `<td>${i * j}</td>`;
+                }
+                tableHTML += "</tr>";
+            }
+            tableHTML += "</table>";
+
+            tableDisplay.innerHTML = tableHTML;
+        }
+
+        function displayCode() {
+            const jsCode = document.getElementById("jsCode");
+            const codeLines = [
+                'function generateMultiplicationTable(maxNumber) {',
+            '        let table = [];',
+                '    for (let i = 1; i <= maxNumber; i++) {',
+                '        let row = [];',
+                '        for (let j = 1; j <= 10; j++) {',
+                '            row.push(i * j);',
+                '        }',
+                '        table.push(row);',
+                '    }',
+                '    return table;',
+                '}',
+                '',
+                `const multiplicationTable = generateMultiplicationTable(${maxNumber});`,
+                'console.log(multiplicationTable);'
+            ];
+
+            jsCode.innerHTML = `<pre><code>${codeLines.join('\n')}</code></pre>`;
+        }
+
+        function resetForm() {
+            document.getElementById("maxNumber").value = "";
+            document.getElementById("maxNumber").disabled = false;
+            document.getElementById("tableDisplay").innerHTML = "";
+            document.getElementById("jsCode").innerHTML = "";
+            document.getElementById("generateButton").disabled = true;
+            document.getElementById("resetButton").disabled = true;
+        }
+
+        // Initialize the form on page load
+        document.addEventListener("DOMContentLoaded", () => {
+            checkInput();
+            document.getElementById("resetButton").disabled = true;
+        });
+    </script>
+</body>
+</html>
