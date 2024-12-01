@@ -1,457 +1,381 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
+<!DOCTYPE html><html lang="en"><head>
+     
+      
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Multiplication Table Generator</title>
-    <style>
-                      
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Roboto:wght@300;400;500&family=Roboto+Mono&display=swap');
-@import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css');
-
-:root {
-    --primary-color: #4682B4;
-    --secondary-color: #E6F2FF;
-    --text-color: #333;
-    --accent-color: #5F9EA0;
-}
-
-* {
-    box-sizing: border-box;
-    transition: all 0.3s ease;
-}
-
-body {
-    font-family: 'Roboto', Arial, sans-serif;
-    background: linear-gradient(135deg, #F0F8FF, #E6E6FA);
-    color: var(--text-color);
-    max-width: 1200px;
-    margin: 40px auto;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    animation: fadeIn 1.5s ease-in-out;
-}
-
-h1, h2, h3, h4, h5, h6 {
-    font-family: 'Montserrat', sans-serif;
-}
-
-h1 {
-    text-align: center;
-    color: var(--primary-color);
-    margin-bottom: 30px;
-    font-size: 3rem;
-    font-weight: 700;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-    animation: bounceInDown 1.5s, pulse 2s infinite alternate;
-    letter-spacing: -1px;
-}
-
-.container {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-}
-
-.input-section, .execution-result-section {
-    background-color: var(--secondary-color);
-    border-radius: 12px;
-    padding: 25px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-    animation: fadeInUp 1.5s;
-    transition: transform 0.3s ease;
-    width: 100%;
-}
-
-.input-section:hover, .execution-result-section:hover {
-    transform: translateY(-5px);
-}
-
-.input-section {
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-}
-
-label {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 600;
-    color: var(--primary-color);
-    font-size: 1.1rem;
-}
-
-input, select {
-    width: 100%;
-    padding: 12px 15px;
-    border-radius: 8px;
-    border: 2px solid var(--primary-color);
-    font-size: 16px;
-    background-color: rgba(255, 255, 255, 0.8);
-    transition: all 0.3s ease;
-}
-
-input:focus, select:focus {
-    outline: none;
-    border-color: var(--accent-color);
-    box-shadow: 0 0 10px rgba(95, 158, 160, 0.5);
-}
-
-.buttons {
-    display: flex;
-    justify-content: space-between;
-    gap: 15px;
-    margin-top: 15px;
-}
-
-#generateButton, #resetButton {
-    padding: 12px 20px;
-    background-color: var(--accent-color);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    animation: fadeIn 1s;
-    font-family: 'Montserrat', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    flex: 1;
-    width: 50%; /* Set both buttons to 50% width */
-    max-width: 200px; /* Limit maximum width */
-    min-width: 120px; /* Ensure minimum width */
-}
-
-#generateButton:hover, #resetButton:hover {
-    background-color: #4F8A8B;
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(79, 138, 139, 0.4);
-}
-
-#generateButton:active, #resetButton:active {
-    transform: translateY(1px);
-}
-
-#generateButton:disabled, #resetButton:disabled {
-    background-color: #B0C4DE;
-    cursor: not-allowed;
-    opacity: 0.7;
-    transform: none;
-    box-shadow: none;
-}
-
-.function-explanation, .execution-steps, .result-section, .code-section {
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.function-explanation h2, .execution-steps h2, .result-section h2, .code-section h2 {
-    color: var(--primary-color);
-    margin-bottom: 10px;
-}
-
-.code-section pre {
-    margin: 0;
-    padding: 0;
-}
-
-#functionExplanationDisplay, #steps, #jsCode {
-    font-family: 'Roboto Mono', 'Courier New', monospace;
-    white-space: pre;
-    background-color: #f1f3f5;
-    border-radius: 5px;
-    padding: 10px;
-    font-size: 14px;
-    line-height: 1.5;
-    color: #333;
-    overflow-x: auto;
-}
-
-#steps pre {
-    background-color: #dbdbdd;
-    border-radius: 4px;
-    padding: 10px;
-    overflow-x: auto;
-}
-
-#resultDisplay {
-    color: inherit; /* Change to inherit to use the parent's font color */
-    font-size: 18px;
-    background-color: #f1f3f5;
-    border-radius: 5px;
-    padding: 10px;
-}
-
-.error {
-    color: #dc3545;
-    font-weight: bold;
-}
-
-@keyframes pulse {
-    0% {
-        transform: scale(1);
-    }
-    100% {
-        transform: scale(1.05);
-    }
-}
-
-@media (min-width: 768px) {
-    .container {
-        flex-direction: row;
-    }
-
-    .input-section {
-        width: 30%;
-    }
-
-    .execution-result-section {
-        width: 70%;
-    }
-}
-
-@media (max-width: 480px) {
-    body {
-        padding: 10px;
-    }
-
-    h1 {
-        font-size: 2rem;
-    }
-
-    .input-section, .execution-result-section {
-        padding: 15px;
-    }
-
-    input, select, button {
-        font-size: 14px;
-    }
-
-    #generateButton, #resetButton {
-        padding: 10px 15px;
-    }
-}
-
-.result-section {
-    overflow-x: auto;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-}
-
-th, td {
-    border: 1px solid var(--primary-color);
-    padding: 8px;
-    text-align: center;
-}
-
-th {
-    background-color: var(--primary-color);
-    color: white;
-}
-
-@media (max-width: 600px) {
-    table {
-        font-size: 12px;
-    }
-
-    th, td {
-        padding: 4px;
-    }
-}
-
-@media (max-width: 400px) {
-    table {
-        font-size: 10px;
-    }
-
-    th, td {
-        padding: 2px;
-    }
-}
-
-.highlight {
-    background-color: yellow;
-    font-weight: bold;
-}
-
-#nextButton {
-    padding: 12px;
-    background-color: var(--accent-color);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    animation: fadeIn 1s;
-    font-family: 'Montserrat', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    width: calc(50% - 7.5px);
-}
-
-#nextButton:hover {
-    background-color: #4F8A8B;
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(79, 138, 139, 0.4);
-}
-
-#nextButton:active {
-    transform: translateY(1px);
-}
-
-#nextButton:disabled {
-    background-color: #B0C4DE;
-    cursor: not-allowed;
-    opacity: 0.7;
-    transform: none;
-    box-shadow: none;
-}
-
-#nextButton:disabled:hover {
-    background-color: #B0C4DE;
-    transform: none;
-    box-shadow: none;
-}
-
-#jsCode {
-    white-space: pre;
-    font-family: monospace;
-    background-color: #f5f5f5;
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 20px;
-}
+    <meta content="" name="description">
+    <meta content="" name="author">
     
+    	<meta name="experiment-short-name" content="arithmetic-operations">
+    	<meta name="developer-institute" content="IITK">
+    	<meta name="learning-unit" content="ARITHMETIC OPERATIONS">
+    	<meta name="task-name" content="Aim">
+    
+    
+    <title>Virtual Labs</title>
+   
+   
+    <link rel="stylesheet" href="mul.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&amp;family=Raleway&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    
+  
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj" crossorigin="anonymous"></script>
+    
+    <style>
+      h1 {
+      font-size: 1.8rem;
+      }
+      h2 {
+      font-size: 1.4rem;
+      }
+      h3 {
+      font-size: 1.2rem;
+      }
+
+      h2, h3 {
+      font-weight: 800;
+      }
     </style>
-</head>
-<body>
-    <h1>Multiplication Table Generator</h1>
-
-    <div class="container">
-        <!-- Input Section -->
-        <div class="input-section">
-            <label for="maxNumber">Enter a number:</label>
-            <input type="number" id="maxNumber" placeholder="Enter any positive number" min="1" oninput="checkInput()">
+    
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"></head>
+  <body class="p-0 container-fluid vlabs-page d-flex flex-column justify-content-between">
+      
+  
+      <header class="vlabs-header sticky-top bg-white">
+        <nav class="p-0 navbar navbar-light d-flex align-items-stretch">
+          
+          <button class="navbar-toggler px-4" type="button" onclick="toggle()">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+      
+          <div class="d-flex justify-content-center">        
+            <a href="" class="navbar-brand">
+              <img src="vlab.jpg" alt="vlabs logo" class="vlabs-logo">
+            </a>
+          </div>
+          
+          <div id="headerNavbar" class="d-none border-top flex-grow-1 d-lg-flex align-items-center justify-content-end">
+            <div>
+               
+            </div>      
+            <div class="svc-rating-submit">
+                <rating-submit title="Rate" this="" experiment="">
+                </rating-submit>
+            </div><bug-report id="bug-report" button_style="border: none; color: #fff; background-color: #288ec8; text-align: center; font-size: 1.05rem; border-radius: 1em;padding: 0.6em 1.2em; margin: 0 10px" position="override" custom_button_class="v-button"></bug-report>
+          </div>
+        </nav>
+      </header>
+      <div class="container-fluid flex-fill d-flex flex-column vlabs-page-main">
+        <div class="row d-flex justify-content-between">
+          <div class="flex-column">
             
-            <div class="buttons">
-                <button id="generateButton" onclick="generateTable()" disabled>Generate Table</button>
-                <button id="resetButton" onclick="resetForm()" disabled>Reset</button>
+            <div class="row py-4 px-4 breadcrumbs">
+              <a href="#">
+                Computer Science and Engineering               
+              </a>
+              <span class="mx-2">
+                <i aria-hidden="true" class="fa fa-angle-right"></i>
+              </span>
+              <a href="/project-1/Introduction.html"> 
+              Vedic Maths
+              </a>
+              <span class="mx-2">
+                <i aria-hidden="true" class="fa fa-angle-right"></i>
+              </span>
+              <a href="/project-1/List of experiments.html">
+              Experiments
+              </a>
             </div>
+            
+          </div>
         </div>
-
-        <!-- Result Section -->
-        <div class="execution-result-section">
-            <div class="function-explanation">
-                <h2>Multiplication Table Explanation</h2>
-                <div id="tableExplanation"></div>
+        <div class="row flex-grow-1 d-flex flex-nowrap flex-column flex-lg-row">
+          <div class="modal fade popupmenu" id="popupMenu" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">
+                              <a href="" class="navbar-brand">
+                                  <img src="vlab.jpg" alt="vlabs logo" class="vlabs-logo">
+                              </a>
+                          </h5>
+                          <button type="button" class="btn-close align-self-center" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body nav-menu">
+                              <div>
+                                  <div class="d-flex nav-menu-body">
+                                      <a href="index.html" class="p-2  current-item ">
+                                      Aim
+                                      </a>
+                                      
+                                  </div>
+                                  <div id="t-" class="collapse">
+                                      <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                                      </div>
+                                  </div>
+                              </div>
+                              <div>
+                                  <div class="d-flex nav-menu-body">
+                                      <a href="theory.html" class="p-2 ">
+                                      Theory
+                                      </a>
+                                      
+                                  </div>
+                                  <div id="t-" class="collapse">
+                                      <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                                      </div>
+                                  </div>
+                              </div>
+                              <div>
+                                  <div class="d-flex nav-menu-body">
+                                      <a href="pretest.html" class="p-2 ">
+                                      Pretest
+                                      </a>
+                                      
+                                  </div>
+                                  <div id="t-" class="collapse">
+                                      <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                                      </div>
+                                  </div>
+                              </div>
+                              <div>
+                                  <div class="d-flex nav-menu-body">
+                                      <a href="procedure.html" class="p-2 ">
+                                      Procedure
+                                      </a>
+                                      
+                                  </div>
+                                  <div id="t-" class="collapse">
+                                      <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                                      </div>
+                                  </div>
+                              </div>
+                              <div>
+                                  <div class="d-flex nav-menu-body">
+                                      <a href="simulation.html" class="p-2 ">
+                                      Simulation
+                                      </a>
+                                      
+                                  </div>
+                                  <div id="t-" class="collapse">
+                                      <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                                      </div>
+                                  </div>
+                              </div>
+                              <div>
+                                  <div class="d-flex nav-menu-body">
+                                      <a href="posttest.html" class="p-2 ">
+                                      Posttest
+                                      </a>
+                                      
+                                  </div>
+                                  <div id="t-" class="collapse">
+                                      <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                                      </div>
+                                  </div>
+                              </div>
+                              <div>
+                                  <div class="d-flex nav-menu-body">
+                                      <a href="references.html" class="p-2 ">
+                                      References
+                                      </a>
+                                      
+                                  </div>
+                                  <div id="t-" class="collapse">
+                                      <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                                      </div>
+                                  </div>
+                              </div>
+                              <div>
+                                  <div class="d-flex nav-menu-body">
+                                      <a href="feedback.html" class="p-2 ">
+                                      Feedback
+                                      </a>
+                                      
+                                  </div>
+                                  <div id="t-" class="collapse">
+                                      <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                                      </div>
+                                  </div>
+                              </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="nav flex-column sidebar nav-menu flex-shrink-0 px-lg-4 align-items-center align-items-lg-start hidden d-none d-lg-flex" id="menu">
+                <div>
+                    <div class="d-flex nav-menu-body">
+                        <a href="index.html" class="p-2  current-item ">
+                        Aim
+                        </a>
+                        
+                    </div>
+                    <div id="t-" class="collapse">
+                        <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="d-flex nav-menu-body">
+                        <a href="theory.html" class="p-2 ">
+                        Theory
+                        </a>
+                        
+                    </div>
+                    <div id="t-" class="collapse">
+                        <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="d-flex nav-menu-body">
+                        <a href="pretest.html" class="p-2 ">
+                        Pretest
+                        </a>
+                        
+                    </div>
+                    <div id="t-" class="collapse">
+                        <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="d-flex nav-menu-body">
+                        <a href="procedure.html" class="p-2 ">
+                        Procedure
+                        </a>
+                        
+                    </div>
+                    <div id="t-" class="collapse">
+                        <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="d-flex nav-menu-body">
+                        <a href="simulation.html" class="p-2 ">
+                        Simulation
+                        </a>
+                        
+                    </div>
+                    <div id="t-" class="collapse">
+                        <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="d-flex nav-menu-body">
+                        <a href="posttest.html" class="p-2 ">
+                        Posttest
+                        </a>
+                        
+                    </div>
+                    <div id="t-" class="collapse">
+                        <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="d-flex nav-menu-body">
+                        <a href="references.html" class="p-2 ">
+                        References
+                        </a>
+                        
+                    </div>
+                    <div id="t-" class="collapse">
+                        <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="d-flex nav-menu-body">
+                        <a href="feedback.html" class="p-2 ">
+                        Feedback
+                        </a>
+                        
+                    </div>
+                    <div id="t-" class="collapse">
+                        <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                        </div>
+                    </div>
+                </div>
+          </div>          <div class="vlabs-page-content px-5 pb-4 flex-grow-1 markdown-body">
+            <div class="text-center fix-spacing">
+              <h2 id="arithmetic-operations">Multiplaction Operations</h2>
+          
             </div>
-            <div class="code-section">
-                <h2>JavaScript Code</h2>
-                <pre id="jsCode"></pre>
+              <p>In this experiment the Student will be able to understand the basics of Multiplaction Operations used in Vedic Maths with the help of a iterative simulator.</p>
+          
+          </div>
+          <div class="bug-report-mobile">
+              <bug-report id="bug-report" title="[BUG REPORT] Arithmetic Operations" page-type="text" context-info="{&quot;organisation&quot;:&quot;Virtual Labs&quot;,&quot;developer_institute&quot;:&quot;IITK&quot;,&quot;expname&quot;:&quot;Arithmetic Operations&quot;,&quot;labname&quot;:&quot;Python Programming Lab&quot;,&quot;phase&quot;:3}" checkbox-json="{&quot;text&quot;:[&quot;Insufficient Content&quot;],&quot;video&quot;:[&quot;Insufficient Content&quot;],&quot;assesment&quot;:[&quot;Incorrect Options&quot;,&quot;Incorrect Answer&quot;,&quot;Incorrect Question&quot;],&quot;assessment&quot;:[&quot;Incorrect Options&quot;,&quot;Incorrect Answer&quot;,&quot;Incorrect Question&quot;],&quot;simulation&quot;:[&quot;Simulation Not Working&quot;,&quot;Incorrect Results/Observations&quot;,&quot;Insufficient/Incorrect Instructions&quot;],&quot;DEFAULT&quot;:[&quot;Page Not Loading&quot;,&quot;Content Not Visible&quot;,&quot;Incorrect Content&quot;]}" position="override" button_style="
+                          position: fixed; 
+                          bottom: 20px;
+                          right: 20px;
+                          z-index: 1;
+                          font-size: 0;
+                          padding: 25px;
+                          border-radius: 50%;
+                          border: none;
+                          background-color: #0fc0ff;
+                          background-image: url(data:image/png;base64,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);
+                          background-repeat: no-repeat;
+                          background-position: center;
+                          background-size: 30px;
+                          filter: invert(1);">
+              </bug-report>
+          </div>        </div>
+      </div>
+      <footer class="text-light pt-2 vlabs-footer d-flex flex-column">
+        <div class="row px-5 mx-0">
+          <div class="col d-flex flex-column">
+            <span class="font-weight-bold vlabs-footer-sect-name pb-2 mb-3">Community Links</span>
+            <a href="#" class="text-light">Sakshat Portal</a>
+            <a href="#" class="text-light">Outreach Portal</a>
+            <a href="#" class="text-light">FAQ: Virtual Labs</a>
+          </div>
+          <div class="col d-flex flex-column">
+            <span class="font-weight-bold vlabs-footer-sect-name pb-2 mb-3">Contact Us</span>
+            <span> Phone: General Information: 011-26582050 </span>
+            <span> Email: support@vlabs.ac.in </span>
+          </div>
+          <div class="col d-flex flex-column">
+            <span class="font-weight-bold vlabs-footer-sect-name pb-2 mb-3">Follow Us</span>
+            <div class="social-links">
+      	<a class="p-2 mt-1 mr-2 d-inline-flex justify-content-center align-items-center" style="background: #55acee;" href="#">
+      	  <i class="fab fa-twitter"></i>
+      	</a>
+      	<a class="p-2 mt-1 mr-2 d-inline-flex justify-content-center align-items-center" style="background: #3b5998;" href="#">
+      	  <i class="fab fa-facebook"></i>
+      	</a>
+      	<a class="p-2 mt-1 mr-2 d-inline-flex justify-content-center align-items-center" style="background: #e52d27;" href="#">
+      	  <i class="fab fa-youtube"></i>
+      	</a>
+      	<a class="p-2 mt-1 mr-2 d-inline-flex justify-content-center align-items-center" style="background: #2867B2;" href="#">
+      	  <i class="fab fa-linkedin"></i>
+      	</a>
             </div>
+          </div>
         </div>
-    </div>
-
-    <!-- Multiplication Table Section -->
-    <div class="result-section">
-        <h2>Multiplication Table</h2>
-        <div id="tableDisplay"></div>
-    </div>
+        <div class="m-0 py-2 text-center" style="font-family: &quot;Open Sans&quot;, sans-serif; background: #212121;">
+          <a class="text-primary font-weight-bold" href="#"> AGPL 3.0 </a>
+          &nbsp;&amp;&nbsp;
+          <a class="text-primary font-weight-bold" href="#"> Creative Commons (CC BY-NC-SA 4.0) </a>
+        </div>
+      </footer>
+    <script src="./assets/js/event-handler.js"></script>
+    <script src="ttoggleSidebar.js"></script>
 
     <script>
-        let maxNumber;
-
-        function checkInput() {
-            const numberInput = document.getElementById("maxNumber").value;
-            const generateButton = document.getElementById("generateButton");
-            generateButton.disabled = !(numberInput && numberInput >= 1);
-        }
-
-        function generateTable() {
-            maxNumber = parseInt(document.getElementById("maxNumber").value);
-            const tableDisplay = document.getElementById("tableDisplay");
-
-            if (isNaN(maxNumber) || maxNumber < 1 ||maxNumber>=10000) {
-                tableDisplay.innerHTML = "<p class='error'>Please enter a valid number.</p>";
-            return;
-            }
-           
-
-            updateTableDisplay();
-            document.getElementById("maxNumber").disabled = true;
-            document.getElementById("generateButton").disabled = true;
-            document.getElementById("resetButton").disabled = false;
-
-            displayCode();
-        }
-
-        function updateTableDisplay() {
-            const tableDisplay = document.getElementById("tableDisplay");
-            let tableHTML = "<table><tr><th>×</th>";
-            for (let j = 1; j <= 10; j++) {
-                tableHTML += `<th>${j}</th>`;
-            }
-            tableHTML += "</tr>";
-
-            for (let i = 1; i <= maxNumber; i++) {
-                tableHTML += `<tr><th>${i}</th>`;
-                for (let j = 1; j <= 10; j++) {
-                    tableHTML += `<td>${i * j}</td>`;
-                }
-                tableHTML += "</tr>";
-            }
-            tableHTML += "</table>";
-
-            tableDisplay.innerHTML = tableHTML;
-        }
-
-        function displayCode() {
-            const jsCode = document.getElementById("jsCode");
-            const codeLines = [
-                'function generateMultiplicationTable(maxNumber) {',
-            '        let table = [];',
-                '    for (let i = 1; i <= maxNumber; i++) {',
-                '        let row = [];',
-                '        for (let j = 1; j <= 10; j++) {',
-                '            row.push(i * j);',
-                '        }',
-                '        table.push(row);',
-                '    }',
-                '    return table;',
-                '}',
-                '',
-                `const multiplicationTable = generateMultiplicationTable(${maxNumber});`,
-                'console.log(multiplicationTable);'
-            ];
-
-            jsCode.innerHTML = `<pre><code>${codeLines.join('\n')}</code></pre>`;
-        }
-
-        function resetForm() {
-            document.getElementById("maxNumber").value = "";
-            document.getElementById("maxNumber").disabled = false;
-            document.getElementById("tableDisplay").innerHTML = "";
-            document.getElementById("jsCode").innerHTML = "";
-            document.getElementById("generateButton").disabled = true;
-            document.getElementById("resetButton").disabled = true;
-        }
-
-        // Initialize the form on page load
-        document.addEventListener("DOMContentLoaded", () => {
-            checkInput();
-            document.getElementById("resetButton").disabled = true;
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register("sw.js");
         });
+      }
     </script>
-</body>
-</html>
+  
+
+<script type="module" src="https://virtual-labs.github.io/svc-bug-report/client/src/bug-report.js"></script><script type="module" src="https://virtual-labs.github.io/svc-rating/index.js"></script><script type="module" src="https://virtual-labs.github.io/svc-rating/config.js"></script><script type="module" src="https://apis.google.com/js/api.js"></script></body></html>
